@@ -1,0 +1,85 @@
+generated: '2026-08-06'
+method: searched
+source: >-
+  https://felis.alice-bob.com/docs/reference/the_api/ (the published curl example),
+  https://felis.alice-bob.com/docs/felis_cloud/connect_to_felis_cloud/ (key issuance), and the
+  reference client
+  https://github.com/Alice-Bob-SW/qiskit-alice-bob-provider/blob/main/qiskit_alice_bob_provider/remote/api/client.py
+  (the exact header it sets). Live behaviour confirmed by probing
+  https://api-gcp.alice-bob.com/v1/health/ unauthenticated on 2026-08-06 (401).
+docs: https://felis.alice-bob.com/docs/felis_cloud/connect_to_felis_cloud/
+description: >-
+  Felis Cloud uses a single static API key. There is no OAuth, no OIDC, no JWT, no mTLS and no
+  scope model. This artifact is method `searched` rather than `derived` because the published
+  OpenAPI declares an EMPTY components.securitySchemes and models the credential as an
+  OPTIONAL `authorization` header parameter — deriving from the spec alone would say the API
+  is unauthenticated, which is wrong.
+
+derived_from_spec: false
+spec_declares_security_schemes: false
+spec_gap: >-
+  openapi/alice--bob-felis-cloud-openapi.json has no components.securitySchemes and no root
+  `security` requirement. 12 of its 14 operations declare `authorization` as an optional
+  (`anyOf: [string, null]`) header parameter; list_targets and target availabilities declare no
+  auth parameter at all. In reality the host is authenticated by default: every path, including
+  /.well-known/*, returns 401 without a key. Corrected in
+  overlays/alice--bob-felis-cloud-overlay.yaml.
+
+schemes:
+  - id: apiKeyAuth
+    type: apiKey
+    in: header
+    name: Authorization
+    value_format: 'Basic <API key>'
+    required: true
+    encoding: none
+    note: >-
+      The literal token `Basic` is followed by the RAW API key. This is NOT RFC 7617 HTTP Basic
+      authentication — the key is not base64-encoded and there is no user:password pair. Sending
+      genuine RFC 7617 credentials will fail. Confirmed both in the docs curl example and in
+      ApiClient.__init__, which sets
+      `self._session.headers.update({'Authorization': f'Basic {api_key}'})`.
+    example_shape: 'Authorization: Basic <API key>'
+    sources:
+      - https://felis.alice-bob.com/docs/reference/the_api/
+      - https://github.com/Alice-Bob-SW/qiskit-alice-bob-provider
+
+key_management:
+  issuance_url: https://api-gcp.alice-bob.com/console/
+  issuance_path: '"API KEYS" tab in the Felis Cloud console'
+  identity_provider: >-
+    Google account — the console is entered with the Google account used to subscribe to Felis
+    Cloud on Google Cloud Marketplace.
+  prerequisite: An active Felis Cloud subscription via https://console.cloud.google.com/marketplace/product/cloud-prod-0/felis-cloud
+  rotation: >-
+    Keys are created and revoked in the console. The docs recommend one key per person so that
+    billing can be attributed and access revoked individually.
+  expiry: not documented
+  scopes: none — the key is all-or-nothing across the whole API
+
+tenancy:
+  model: implicit
+  note: >-
+    There is no account, organisation or project resource in the API. Tenancy is carried by the
+    key and surfaces only as the denormalised `userId`, `userName` and `organizationName`
+    strings on ExternalJob. GET /v1/jobs/ is documented as returning "all active and completed
+    jobs associated with the authenticated user".
+
+not_supported:
+  oauth2: true
+  openid_connect: true
+  mutual_tls: true
+  bearer_jwt: true
+  hmac_request_signing: true
+  webhook_signature_verification: 'n/a — no webhook surface exists'
+
+failure_mode:
+  status: 401
+  body: '{"error": {"code": 401, "message": "Unauthorized"}}'
+  scope: every path on api-gcp.alice-bob.com and api.alice-bob.com
+  exceptions: [/openapi.json, /reference, /console/*]
+  detail: errors/alice--bob-problem-types.yml
+
+transport_security:
+  https_required: true
+  detail: security/alice--bob-domain-security.yml

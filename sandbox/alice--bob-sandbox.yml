@@ -1,0 +1,85 @@
+generated: '2026-08-06'
+method: searched
+source: >-
+  https://felis.alice-bob.com/docs/backends/about_backends/,
+  https://felis.alice-bob.com/docs/felis_cloud/about_felis_cloud/,
+  https://felis.alice-bob.com/docs/getting_started/install_the_qiskit_provider/ and
+  https://github.com/Alice-Bob-SW/qiskit-alice-bob-provider (README).
+description: >-
+  Alice & Bob does not publish a test-mode API key or a separate sandbox host. Its test
+  surface is different in kind: a fully local, credential-free cat-qubit EMULATOR shipped
+  inside the same client library as the remote client, plus cloud-hosted emulator targets on
+  the real API that behave exactly like the QPU targets. There are no fixture values or magic
+  identifiers to record — the test inputs are quantum circuits the developer writes.
+
+modes:
+  - name: local-emulation
+    requires_account: false
+    requires_api_key: false
+    entry_point: 'qiskit_alice_bob_provider.AliceBobLocalProvider'
+    host: none (runs in-process)
+    note: >-
+      The complete cat-qubit emulator stack runs on the developer's own machine with no
+      Felis Cloud subscription and no API key. This is the zero-cost path to exercise circuit
+      construction, transpilation and result handling before touching the API.
+  - name: cloud-emulation
+    requires_account: true
+    requires_api_key: true
+    entry_point: 'qiskit_alice_bob_provider.AliceBobRemoteProvider'
+    host: https://api-gcp.alice-bob.com/v1
+    note: >-
+      EMU:* targets on the live API. Same operations, same auth and same job lifecycle as the
+      QPU targets, so a client can be validated end-to-end against the real contract without
+      consuming quantum hardware time.
+  - name: hardware
+    requires_account: true
+    requires_api_key: true
+    host: https://api-gcp.alice-bob.com/v1
+    note: 'QPU:* targets — real Boson 4 cat-qubit chips, scheduled and billed per hour.'
+
+# Verbatim from the backends table. Target names are the values GET /v1/targets/ returns
+# and the value the `target` field of CreateExternalJob takes.
+targets:
+  emulators:
+    - {name: 'EMU:1Q:LESCANNE_2020', remote: true, local: true, note: 'Interpolated digital twin of the cat qubit in the 2020 Lescanne paper; not current hardware performance.'}
+    - {name: 'EMU:6Q:PHYSICAL_CATS', remote: true, local: true, note: Theoretical model of a 6-physical-cat-qubit processor.}
+    - {name: 'EMU:40Q:PHYSICAL_CATS', remote: true, local: true, note: Theoretical model of a 40-physical-cat-qubit processor.}
+    - {name: 'EMU:15Q:LOGICAL_EARLY', remote: true, local: true}
+    - {name: 'EMU:40Q:LOGICAL_TARGET', remote: true, local: true}
+    - {name: 'EMU:40Q:LOGICAL_NOISELESS', remote: true, local: true}
+  hardware:
+    - {name: 'QPU:1Q:BOSON_4A', remote: true, local: false}
+    - {name: 'QPU:1Q:BOSON_4B', remote: true, local: false}
+    - {name: 'QPU:1Q:BOSON_4C', remote: true, local: false}
+  custom:
+    - {name: user-defined, remote: false, local: true, note: 'Custom noise and time models can be built with the local provider only — https://felis.alice-bob.com/docs/backends/create_custom_backend/'}
+
+naming_convention: '[EMU|QPU]:<n>Q:<NAME> — EMU/QPU distinguishes emulator from real chip, <n>Q is the maximum circuit width, <NAME> is the chip modelled.'
+
+free_allowance:
+  boson_4_qpu: 1 free hour per month, then $5,000/hour
+  emulators: 1 free hour per month, then $25/hour
+  source: https://felis.alice-bob.com/docs/felis_cloud/about_felis_cloud/
+  detail: plans/alice--bob-plans.yml
+
+test_credentials:
+  published: false
+  note: >-
+    No test-mode key prefix, no shared demo key and no publicly usable credential exists. An
+    API key requires a Felis Cloud subscription through Google Cloud Marketplace and is issued
+    per person in the console at https://api-gcp.alice-bob.com/console/ ("API KEYS" tab).
+    Nothing key-shaped is recorded in this repository.
+
+sample_workloads:
+  - {name: Sample notebooks, url: 'https://felis.alice-bob.com/docs/getting_started/sample_notebooks/'}
+  - {name: Provider samples, url: 'https://github.com/Alice-Bob-SW/felis/tree/main/samples'}
+  - {name: Emulation examples, url: 'https://github.com/Alice-Bob-SW/emulation-examples'}
+
+constraints:
+  job_duration_cap: 15 minutes
+  job_duration_reason: >-
+    Only one Boson 4 chip is available at a time; the cap stops a single user blocking it.
+    Source https://felis.alice-bob.com/docs/reference/faq/
+  practical_qubit_ceiling: >-
+    Emulators accept circuits up to their declared width (to 40Q) but the docs warn that
+    beyond 10-15 qubits execution becomes slow or fails, depending on the host machine.

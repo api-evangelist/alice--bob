@@ -1,23 +1,117 @@
 aid: alice--bob
 name: Alice Bob
-description: 'Alice Bob is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'Alice & Bob is a quantum computing company headquartered in Paris with
+  a presence in Boston, founded in 2020, building a universal fault-tolerant quantum
+  computer on cat qubits — superconducting qubits that are intrinsically protected
+  against bit-flip errors. Its commercial developer surface is Felis Cloud, a Quantum
+  Computing as a Service (QCaaS) product that executes quantum circuits on Boson 4
+  cat-qubit QPUs hosted in Alice & Bob''s own premises and on cloud-hosted physical
+  and logical qubit emulators. Felis Cloud is reached through a public REST API (jobs,
+  targets, availability and health) that accepts circuits in QIR format, and through
+  the open-source qiskit-alice-bob-provider Qiskit provider that wraps it.'
+image: https://avatars.githubusercontent.com/u/72556371?v=4
 url: https://raw.githubusercontent.com/api-evangelist/alice--bob/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enrichment-pipeline
 specificationVersion: '0.20'
 created: '2026-08-06'
 modified: '2026-08-06'
 tags:
 - Company
-apis: []
+- Quantum Computing
+- Quantum
+- Cloud Computing
+- Emulation
+- Developer Tools
+- Compute
+- Hardware
+- Research
+- Qiskit
+- QIR
+apis:
+- name: Felis Cloud API
+  description: 'The Felis Cloud API runs quantum circuits on Alice & Bob''s emulators
+    and real cat-qubit quantum hardware. A client creates a job against a named target
+    (listed by List Targets), uploads the circuit as QIR, polls job status, and downloads
+    the histogram output, per-shot memory, transpiled QIR and execution metrics. The
+    same API backs the open-source Qiskit provider.'
+  humanURL: https://felis.alice-bob.com/docs/reference/the_api/
+  baseURL: https://api-gcp.alice-bob.com/v1
+  tags:
+  - Quantum Computing
+  - Jobs
+  - Emulation
+  properties:
+  - type: OpenAPI
+    url: openapi/alice--bob-felis-cloud-openapi.json
+  - type: Overlay
+    url: overlays/alice--bob-felis-cloud-overlay.yaml
+  - type: Documentation
+    url: https://felis.alice-bob.com/docs/
+  - type: APIReference
+    url: https://api-gcp.alice-bob.com/reference
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/alice--bob-domain-security.yml
 - type: Website
+  url: https://alice-bob.com/
+- type: SecondaryMarketListing
   url: https://www.hiive.com/securities/alice--bob-stock
+- type: DeveloperPortal
+  url: https://api-gcp.alice-bob.com/console/
+- type: Documentation
+  url: https://felis.alice-bob.com/docs/
+- type: APIReference
+  url: https://api-gcp.alice-bob.com/reference
+- type: GettingStarted
+  url: https://felis.alice-bob.com/docs/getting_started/install_the_qiskit_provider/
+- type: Support
+  url: https://felis.alice-bob.com/docs/contact_us/
+- type: GitHubOrganization
+  url: https://github.com/Alice-Bob-SW
+- type: Pricing
+  url: https://felis.alice-bob.com/docs/felis_cloud/about_felis_cloud/
+- type: SignUp
+  url: https://console.cloud.google.com/marketplace/product/cloud-prod-0/felis-cloud
+- type: Login
+  url: https://api-gcp.alice-bob.com/console/
+- type: StatusPage
+  url: https://api-gcp.alice-bob.com/console/status
+- type: ChangeLog
+  url: changelog/alice--bob-changelog.yml
+- type: Packages
+  url: packages/alice--bob-packages.yml
+- type: SDKs
+  url: packages/alice--bob-packages.yml
+- type: Sandbox
+  url: sandbox/alice--bob-sandbox.yml
+- type: Plans
+  url: plans/alice--bob-plans.yml
+- type: LLMsTxt
+  url: llms/alice--bob-llms.txt
+- type: Authentication
+  url: authentication/alice--bob-authentication.yml
+- type: Conventions
+  url: conventions/alice--bob-conventions.yml
+- type: Lifecycle
+  url: lifecycle/alice--bob-lifecycle.yml
+- type: Conformance
+  url: conformance/alice--bob-conformance.yml
+- type: ErrorCatalog
+  url: errors/alice--bob-problem-types.yml
+- type: DataModel
+  url: data-model/alice--bob-data-model.yml
+- type: AgentSkill
+  url: skills/_index.yml
+x-enrichment:
+  date: '2026-08-06'
+  status: enriched
+  artifacts_added: 19
+  pass: local-v1

@@ -1,0 +1,65 @@
+generated: '2026-08-06'
+method: searched
+source: >-
+  PyPI JSON API (https://pypi.org/pypi/qiskit-alice-bob-provider/json, 200) and the
+  Alice & Bob GitHub organization API (https://api.github.com/orgs/Alice-Bob-SW, 200,
+  11 public repos), cross-checked against the install instructions at
+  https://felis.alice-bob.com/docs/getting_started/install_the_qiskit_provider/.
+description: >-
+  Alice & Bob distributes exactly one first-party client library: the Qiskit provider
+  for Felis Cloud, published to PyPI from the Alice-Bob-SW GitHub organization. It is
+  both the local emulator package and the remote client for the Felis Cloud REST API —
+  the docs describe it as the reference implementation of the API. No first-party
+  JavaScript, Go, Java, .NET, Ruby, PHP or Rust client is published; those registries
+  were probed and returned no Alice & Bob package.
+
+packages:
+  - language: python
+    registry: pypi
+    name: qiskit-alice-bob-provider
+    official: true
+    url: https://pypi.org/project/qiskit-alice-bob-provider/
+    source: https://github.com/Alice-Bob-SW/qiskit-alice-bob-provider
+    license: Apache-2.0
+    latest_stable: 1.2.0
+    latest_prerelease: 1.3.0b4
+    releases: 36
+    requires_python: '>=3.9,<3.14'
+    install: pip install qiskit-alice-bob-provider
+    summary: >-
+      Provider for running Qiskit circuits on Alice & Bob QPUs and simulators. Ships
+      both AliceBobRemoteProvider (calls the Felis Cloud REST API with an API key) and
+      AliceBobLocalProvider (local cat-qubit emulators, no account required).
+    covers_api: Felis Cloud API
+
+# Not client libraries, but first-party open-source tooling in the same GitHub org.
+related_repositories:
+  - name: felis
+    url: https://github.com/Alice-Bob-SW/felis
+    official: true
+    role: Source of the Felis documentation site and the sample notebooks.
+  - name: emulation-examples
+    url: https://github.com/Alice-Bob-SW/emulation-examples
+    official: true
+    role: Example notebooks emulating cat-qubit quantum processors.
+  - name: qsharp-alice-bob-resource-estimator
+    url: https://github.com/Alice-Bob-SW/qsharp-alice-bob-resource-estimator
+    official: true
+    role: >-
+      Extension of the Microsoft Q# resource estimator for cat qubits plus the
+      repetition code. Distributed as source only — no published package found on
+      PyPI, crates.io or NuGet.
+  - name: qiskit-qir
+    url: https://github.com/Alice-Bob-SW/qiskit-qir
+    official: true
+    role: Qiskit-to-QIR translator (fork), the input format the Felis Cloud API accepts.
+
+registries_probed:
+  - {registry: pypi, result: hit, note: 'qiskit-alice-bob-provider (200); qsharp-alice-bob-resource-estimator, alice-bob, felis-cloud, alice-bob-sdk all 404.'}
+  - {registry: npm, result: miss, note: 'The npm package named "alice-bob" (200) is an unrelated RPC library by GitHub user stagas — NOT Alice & Bob. @alice-bob/sdk and qiskit-alice-bob 404.'}
+  - {registry: crates.io, result: miss, note: 'Search for "alice-bob" returned no Alice & Bob crate.'}
+  - {registry: maven-central, result: miss}
+  - {registry: nuget, result: miss}
+  - {registry: rubygems, result: miss}
+  - {registry: packagist, result: miss}
+  - {registry: pkg.go.dev, result: miss}

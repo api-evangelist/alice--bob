@@ -1,0 +1,137 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancement overlay for the Alice & Bob Felis Cloud API
+  version: 1.0.0
+extends: openapi/alice--bob-felis-cloud-openapi.json
+generated: '2026-08-06'
+method: generated
+source: openapi/alice--bob-felis-cloud-openapi.json
+rationale: >-
+  The captured OpenAPI is FastAPI-generated and carries three gaps that make it hard for a
+  machine to consume: (1) components.securitySchemes is absent and the API key is modelled as
+  an OPTIONAL `authorization` header parameter on each operation, even though every
+  unauthenticated request to api-gcp.alice-bob.com returns 401; (2) servers[] is the relative
+  path "/external", which is an internal routing artefact — the documented public base URL is
+  https://api-gcp.alice-bob.com/ (the pre-GCP host https://api.alice-bob.com/ still answers);
+  (3) no operation is tagged, and the 401 the edge actually returns is not declared anywhere.
+  This overlay records all of that WITHOUT mutating the harvested spec. Apply with any
+  Overlay 1.0.0 processor against openapi/alice--bob-felis-cloud-openapi.json.
+actions:
+  - target: $.servers
+    description: >-
+      Replace the relative "/external" server with the public base URLs documented at
+      https://felis.alice-bob.com/docs/reference/the_api/.
+    update:
+      - url: https://api-gcp.alice-bob.com
+        description: Felis Cloud on Google Cloud Platform — the default host since provider 0.7.0.
+      - url: https://api.alice-bob.com
+        description: Legacy host. Still answers; demoted, not sunset.
+
+  - target: $.components.securitySchemes
+    description: >-
+      Declare the API key scheme Alice & Bob actually enforces. The docs and the reference
+      client send the raw key after the literal `Basic` auth-scheme token — this is NOT
+      RFC 7617 base64 credentials, so it is modelled as an apiKey in the Authorization header
+      rather than as http/basic.
+    update:
+      apiKeyAuth:
+        type: apiKey
+        in: header
+        name: Authorization
+        description: >-
+          Felis Cloud API key, sent as `Authorization: Basic <API key>` with the raw key
+          string (not base64-encoded). Issued per person in the console at
+          https://api-gcp.alice-bob.com/console/ ("API KEYS" tab) after subscribing to Felis
+          Cloud on Google Cloud Marketplace. See
+          authentication/alice--bob-authentication.yml.
+
+  - target: $.security
+    description: Apply the API key scheme to every operation — the host is authenticated by default.
+    update:
+      - apiKeyAuth: []
+
+  - target: $.info
+    description: Record the contact and documentation surfaces the harvested spec omits.
+    update:
+      contact:
+        name: Alice & Bob — Felis Cloud
+        url: https://felis.alice-bob.com/docs/contact_us/
+      externalDocs:
+        description: Felis Documentation
+        url: https://felis.alice-bob.com/docs/
+
+  - target: $.tags
+    description: >-
+      Add the two resource groupings the spec's own path structure implies. No operation in
+      the harvested spec carries a `tags` array.
+    update:
+      - name: jobs
+        description: Create, monitor, cancel and read the results of circuit execution jobs.
+      - name: targets
+        description: Discover backends (emulators and QPUs), their configuration, health and availability.
+      - name: health
+        description: Service liveness.
+
+  - target: $.paths['/v1/jobs/'].get
+    description: Tag the jobs collection operations.
+    update:
+      tags: [jobs]
+  - target: $.paths['/v1/jobs/'].post
+    update:
+      tags: [jobs]
+  - target: $.paths['/v1/jobs/{job_id}'].get
+    update:
+      tags: [jobs]
+  - target: $.paths['/v1/jobs/{job_id}'].delete
+    update:
+      tags: [jobs]
+  - target: $.paths['/v1/jobs/{job_id}/input'].post
+    update:
+      tags: [jobs]
+  - target: $.paths['/v1/jobs/{job_id}/input'].get
+    update:
+      tags: [jobs]
+  - target: $.paths['/v1/jobs/{job_id}/transpiled'].get
+    update:
+      tags: [jobs]
+  - target: $.paths['/v1/jobs/{job_id}/output'].get
+    update:
+      tags: [jobs]
+  - target: $.paths['/v1/jobs/{job_id}/memory'].get
+    update:
+      tags: [jobs]
+  - target: $.paths['/v1/jobs/{job_id}/metrics'].get
+    update:
+      tags: [jobs]
+  - target: $.paths['/v1/targets/'].get
+    update:
+      tags: [targets]
+  - target: $.paths['/v1/targets/{target}/health'].get
+    update:
+      tags: [targets]
+  - target: $.paths['/v1/targets/{target}/availabilities'].get
+    update:
+      tags: [targets]
+  - target: $.paths['/v1/health/'].get
+    update:
+      tags: [health]
+
+  - target: $.components.schemas
+    description: >-
+      Add the gateway error schema observed live (401 on every path without a key). It is not
+      declared anywhere in the harvested spec.
+    update:
+      GatewayError:
+        type: object
+        description: >-
+          Error envelope returned by the API edge, distinct from the FastAPI
+          HTTPValidationError envelope used by the application. See
+          errors/alice--bob-problem-types.yml.
+        properties:
+          error:
+            type: object
+            properties:
+              code: {type: integer, example: 401}
+              message: {type: string, example: Unauthorized}
+            required: [code, message]
+        required: [error]

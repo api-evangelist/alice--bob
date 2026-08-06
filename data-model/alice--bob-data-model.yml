@@ -1,0 +1,114 @@
+generated: '2026-08-06'
+method: derived
+source: >-
+  Derived from the $ref graph and id-reference fields in
+  openapi/alice--bob-felis-cloud-openapi.json (OpenAPI 3.1.0, 14 operations, 18 schemas),
+  cross-read against https://felis.alice-bob.com/docs/backends/about_backends/ for the
+  target naming convention.
+docs: https://api-gcp.alice-bob.com/reference
+description: >-
+  The Felis Cloud domain is small and job-centric. A Job is submitted against a Target; the
+  Job accumulates Events, may accumulate Errors, and exposes Metrics. A Target advertises a
+  Configuration (width, supported instructions, tunable input parameters) and a stream of
+  Availability records. There is no customer, project or organisation resource — tenancy is
+  implied by the API key and only surfaces as denormalised strings on the Job.
+notation: >-
+  relationships use has_one / has_many / belongs_to with the referencing field name;
+  direction is from the entity that holds the reference.
+
+entities:
+  - name: Job
+    schema: ExternalJob
+    id_field: id
+    id_format: UUID
+    domain: execution
+    description: >-
+      One circuit execution request. Created from CreateExternalJob, carries inputDataFormat
+      (HUMAN_QIR), outputDataFormat (HISTOGRAM), the target name, a free-form inputParams
+      object, and the denormalised owner fields userId, userName and organizationName.
+  - name: JobEvent
+    schema: JobEvent
+    domain: execution
+    description: >-
+      A timestamped state transition on a Job. `type` is an EventType enum; the last event is
+      the authoritative job state.
+  - name: JobError
+    schema: JobError
+    domain: execution
+    description: A failure attached to a Job. `content` is an untyped object — no code registry is published.
+  - name: JobMetrics
+    schema: ExternalJobMetrics
+    domain: execution
+    description: 'Execution timings exposed to the caller: qpu_duration_ns and simulation_duration_ns.'
+  - name: Target
+    schema: TargetConfiguration
+    id_field: name
+    id_format: '[EMU|QPU]:<n>Q:<NAME>'
+    domain: catalog
+    description: >-
+      A backend a job can run on — an emulator or a real chip. Carries numQubits, the list of
+      supported Instructions and the map of tunable InputParamConfigurations.
+  - name: Instruction
+    schema: Instruction
+    domain: catalog
+    description: A gate/operation signature a Target supports.
+  - name: InputParamConfiguration
+    schema: InputParamConfiguration
+    domain: catalog
+    description: >-
+      A tunable target parameter (e.g. average_nb_photons, kappa_1, kappa_2) with type
+      (float|int|bool), required flag, default and range constraints.
+  - name: InputParamRangeConstraint
+    schema: InputParamRangeConstraint
+    domain: catalog
+    description: A min/max bound on an InputParamConfiguration.
+  - name: TargetAvailability
+    schema: TargetAvailability
+    id_field: id
+    domain: operations
+    description: >-
+      A dated record of whether a Target is enabled, with an optional operator message.
+      The published availability history for a chip.
+
+enumerations:
+  - name: EventType
+    values: [CREATED, FETCHING_INPUT, INPUT_READY, COMPILING, COMPILED, COMPILATION_FAILED,
+      TRANSPILING, TRANSPILED, TRANSPILATION_FAILED, EXECUTING, SUCCEEDED, EXECUTION_FAILED,
+      CANCELLED, TIMED_OUT]
+  - name: TargetStatus
+    values: [OFF, OK, NOK]
+  - name: InputDataFormat
+    values: [HUMAN_QIR]
+    note: single-valued const in the spec
+  - name: OutpuDataFormat
+    values: [HISTOGRAM]
+    note: 'single-valued const in the spec; the schema name is misspelled upstream (OutpuDataFormat) — preserved verbatim.'
+
+relationships:
+  - {from: Job, to: Target, kind: belongs_to, via: target}
+  - {from: Job, to: JobEvent, kind: has_many, via: events}
+  - {from: Job, to: JobError, kind: has_many, via: errors}
+  - {from: Job, to: JobMetrics, kind: has_one, via: 'GET /v1/jobs/{job_id}/metrics'}
+  - {from: JobEvent, to: EventType, kind: belongs_to, via: type}
+  - {from: Target, to: Instruction, kind: has_many, via: instructions}
+  - {from: Target, to: InputParamConfiguration, kind: has_many, via: inputParams}
+  - {from: InputParamConfiguration, to: InputParamRangeConstraint, kind: has_many, via: constraints}
+  - {from: Target, to: TargetAvailability, kind: has_many, via: target}
+  - {from: Target, to: TargetStatus, kind: has_one, via: 'GET /v1/targets/{target}/health'}
+
+payload_attachments:
+  note: >-
+    Three binary/document artefacts hang off a Job but are not modelled as schemas — they are
+    fetched from dedicated sub-paths.
+  items:
+    - {name: input, operation: 'upload_input_v1_jobs__job_id__input_post / download_input_v1_jobs__job_id__input_get', format: QIR}
+    - {name: transpiled, operation: download_transpiled_v1_jobs__job_id__transpiled_get, format: QIR (target gate set)}
+    - {name: output, operation: download_output_v1_jobs__job_id__output_get, format: histogram of measurements to counts}
+    - {name: memory, operation: download_memory_v1_jobs__job_id__memory_get, format: per-shot measurement list}
+
+observations:
+  - No Customer / Organization / Project entity exists; ownership appears only as the
+    denormalised userId, userName and organizationName strings on ExternalJob.
+  - inputParams is typed as a bare `object` on both CreateExternalJob and ExternalJob, so the
+    per-target parameter contract is only discoverable at runtime via GET /v1/targets/.
+  - JobError.content is untyped, so failure reasons are not machine-classifiable from the spec.

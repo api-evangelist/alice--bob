@@ -1,0 +1,84 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+provider: Alice & Bob
+providerId: alice--bob
+generated: '2026-08-06'
+method: searched
+created: '2026-08-06'
+modified: '2026-08-06'
+tags:
+  - Quantum Computing
+  - Cloud Computing
+  - Emulation
+description: >-
+  Felis Cloud is priced purely on usage time against the target class, with a monthly free
+  allowance on each. There are no named tiers, no seat pricing and no published API-call
+  pricing — the meter is wall-clock time on the backend. Subscription and billing run through
+  Google Cloud Marketplace. Alice & Bob states that pricing can be customised for large
+  volumes or for access outside the public availability hours.
+sources:
+  - https://felis.alice-bob.com/docs/felis_cloud/about_felis_cloud/
+  - https://console.cloud.google.com/marketplace/product/cloud-prod-0/felis-cloud
+billing_channel: Google Cloud Marketplace
+currency: USD
+
+plans:
+  - id: alice--bob-felis-cloud-qpu
+    name: Felis Cloud — Boson 4 QPU
+    type: usage-based
+    description: Execution time on a real Boson 4 cat-qubit quantum chip.
+    entries:
+      - label: Free monthly allowance
+        name: qpu_free_hour
+        type: metered
+        metric: hour
+        limit: 1
+        timeFrame: month
+        unit: 1
+        price: '0'
+        userMultiplied: false
+      - label: Boson 4 QPU time beyond the free hour
+        name: qpu_hour
+        type: metered
+        metric: hour
+        limit: -1
+        timeFrame: usage
+        unit: 1
+        price: '$5000'
+        userMultiplied: false
+  - id: alice--bob-felis-cloud-emulators
+    name: Felis Cloud — Emulators
+    type: usage-based
+    description: Execution time on the cloud-hosted physical and logical cat-qubit emulators.
+    entries:
+      - label: Free monthly allowance
+        name: emu_free_hour
+        type: metered
+        metric: hour
+        limit: 1
+        timeFrame: month
+        unit: 1
+        price: '0'
+        userMultiplied: false
+      - label: Emulator time beyond the free hour
+        name: emu_hour
+        type: metered
+        metric: hour
+        limit: -1
+        timeFrame: usage
+        unit: 1
+        price: '$25'
+        userMultiplied: false
+  - id: alice--bob-felis-cloud-custom
+    name: Felis Cloud — Custom
+    type: contact-sales
+    description: >-
+      Negotiated pricing for a large number of hours, or for access outside the public
+      hardware availability schedule. No published rate.
+    entries: []
+
+free_of_charge:
+  - label: Local emulation
+    note: >-
+      The AliceBobLocalProvider emulators in qiskit-alice-bob-provider run on the developer's
+      own machine and are free and unmetered — no subscription or API key required.

@@ -1,0 +1,82 @@
+generated: '2026-08-06'
+method: searched
+source: >-
+  https://felis.alice-bob.com/docs/reference/changelog/ (provider changelog),
+  https://felis.alice-bob.com/docs/felis_cloud/hardware_availability_schedule/ (availability +
+  live status), https://api-gcp.alice-bob.com/console/status (live backend status, 200), and
+  openapi/alice--bob-felis-cloud-openapi.json for version/deprecation flags.
+description: >-
+  How the Felis Cloud API and the Qiskit provider that wraps it are versioned, changed and
+  operated. Alice & Bob publishes a dated-by-release changelog for the CLIENT LIBRARY and a
+  live status surface for the BACKENDS, but no versioning or deprecation policy for the REST
+  API itself.
+
+versioning:
+  scheme: URI path prefix
+  current: v1
+  mechanism: /v1/ path segment on https://api-gcp.alice-bob.com/
+  header: null
+  spec_info_version: 0.1.0
+  policy_url: null
+  notes: >-
+    There is no published API versioning policy, no version request header and no dated
+    version train. The only stable contract signal is the /v1 path prefix; info.version in
+    the OpenAPI reads 0.1.0 and has not been used as a client pin. The Qiskit provider is
+    versioned independently with semver (currently 1.2.0 stable, 1.3.0b4 pre-release) and
+    that is where breaking changes are actually announced.
+  host_migration:
+    from: https://api.alice-bob.com/
+    to: https://api-gcp.alice-bob.com/
+    announced_in: 'Qiskit provider changelog, version 0.7.0'
+    note: >-
+      "Changed default remote API URL to api-gcp.alice-bob.com instead of api.alice-bob.com,
+      following the official release of Felis Cloud on Google Cloud Platform." The legacy
+      host still answers (401 unauthenticated, /openapi.json 200 with an identical spec) —
+      it was not sunset, only demoted.
+
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  deprecated_operations: []
+  notes: >-
+    No deprecation policy, sunset schedule or RFC 8594 Sunset/Deprecation header is published
+    for the REST API, and no operation in the OpenAPI carries `deprecated: true`. Breaking
+    changes are announced only in the client-library changelog, after the fact (Python 3.7 and
+    3.8 support dropped; qiskit `execute()` removed at provider 1.0.0; circuit.cnot() renamed
+    to circuit.cx()). Recorded honestly — no Deprecation pointer is wired because no policy exists.
+
+status:
+  status_page: https://api-gcp.alice-bob.com/console/status
+  status_page_type: Live per-backend status inside the Felis Cloud console (client-rendered)
+  api_health_endpoint: GET /v1/health/
+  target_health_endpoint: GET /v1/targets/{target}/health
+  target_status_values: [OFF, OK, NOK]
+  availability_schedule: https://felis.alice-bob.com/docs/felis_cloud/hardware_availability_schedule/
+  availability_endpoint: GET /v1/targets/{target}/availabilities
+  incident_channel: 'The Cat Tree (Slack community) — https://felis.alice-bob.com/docs/contact_us/'
+  notes: >-
+    Emulator targets are stated to be available 24/7. Quantum hardware is scheduled, and the
+    docs state Alice & Bob "might need to take down the chip at any moment without advance
+    notice." As of the probe, Boson 4 was recorded on the availability page as offline for a
+    lengthy maintenance operation.
+
+sla:
+  url: null
+  published: false
+  note: >-
+    No service level agreement is published on the documentation host. Commercial terms are
+    carried by the Google Cloud Marketplace subscription; custom availability outside the
+    public schedule is offered on request.
+
+support:
+  primary: 'The Cat Tree — Slack community (invite published at https://felis.alice-bob.com/docs/contact_us/)'
+  sales_or_confidential: https://alice-bob.com/cloud-contact
+  response_target: 'Within one working day (French calendar), per the contact page.'
+
+changelog:
+  url: https://felis.alice-bob.com/docs/reference/changelog/
+  scope: Qiskit provider (client library), not the REST API
+  detail: changelog/alice--bob-changelog.yml

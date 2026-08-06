@@ -1,0 +1,18 @@
+generated: '2026-08-06'
+method: generated
+source: >-
+  Packaged Agent Skills generated from Alice & Bob's published OpenAPI
+  (openapi/alice--bob-felis-cloud-openapi.json, OpenAPI 3.1.0, 14 operations). Every step is
+  grounded in an operationId verified verbatim in the spec; cross-cutting rules cite
+  ../authentication/, ../conventions/, ../errors/, ../data-model/, ../sandbox/ and ../plans/.
+  Alice & Bob publishes no skills or AGENTS.md of its own — the docs host was crawled via its
+  sitemap (31 pages) and carries none.
+skills:
+  - file: alice--bob-run-a-quantum-circuit.md
+    name: Run a quantum circuit on Felis Cloud
+    api: openapi/alice--bob-felis-cloud-openapi.json
+    operations: [create_job_v1_jobs__post, upload_input_v1_jobs__job_id__input_post, get_job_v1_jobs__job_id__get, download_output_v1_jobs__job_id__output_get, download_memory_v1_jobs__job_id__memory_get, get_job_metrics_v1_jobs__job_id__metrics_get, cancel_job_v1_jobs__job_id__delete]
+  - file: alice--bob-select-and-check-a-backend.md
+    name: Select and check a Felis Cloud backend
+    api: openapi/alice--bob-felis-cloud-openapi.json
+    operations: [list_targets_v1_targets__get, target_status_v1_targets__target__health_get, list_target_availabilities_v1_targets__target__availabilities_get, check_health_v1_health__get, list_jobs_v1_jobs__get]

@@ -1,0 +1,45 @@
+generated: '2026-08-06'
+method: probed
+source: >-
+  Direct HTTP probes of every Alice & Bob host in this profile on 2026-08-06:
+  the API host (api-gcp.alice-bob.com), the legacy API host (api.alice-bob.com),
+  the documentation host (felis.alice-bob.com) and the corporate site (alice-bob.com).
+description: >-
+  No /.well-known/ document is published on any Alice & Bob host. The API hosts
+  answer 401 for every path except /openapi.json, /reference and /console/*, so a
+  well-known probe there is indistinguishable from any other unauthenticated request.
+  The documentation host is a GitHub-Pages-style MkDocs site and returns its 404 page.
+  The corporate site sits behind a SiteGround captcha challenge that answers 202 with a
+  meta-refresh interstitial for every path, including /.well-known/*. Recorded as
+  evidence; no WellKnown or SecurityTxt pointer is wired because nothing was found.
+hits: []
+probes:
+  - {host: api-gcp.alice-bob.com, path: /.well-known/security.txt, status: 401, content_type: 'text/plain; charset=utf-8', result: gated}
+  - {host: api-gcp.alice-bob.com, path: /.well-known/openid-configuration, status: 401, content_type: 'text/plain; charset=utf-8', result: gated}
+  - {host: api-gcp.alice-bob.com, path: /.well-known/oauth-authorization-server, status: 401, content_type: 'text/plain; charset=utf-8', result: gated}
+  - {host: api-gcp.alice-bob.com, path: /.well-known/oauth-protected-resource, status: 401, content_type: 'text/plain; charset=utf-8', result: gated}
+  - {host: api-gcp.alice-bob.com, path: /.well-known/api-catalog, status: 401, content_type: 'text/plain; charset=utf-8', result: gated}
+  - {host: api-gcp.alice-bob.com, path: /.well-known/agent-card.json, status: 401, content_type: application/json, result: gated}
+  - {host: api-gcp.alice-bob.com, path: /.well-known/agent.json, status: 401, content_type: application/json, result: gated}
+  - {host: felis.alice-bob.com, path: /.well-known/security.txt, status: 404, content_type: 'text/html; charset=utf-8', result: miss}
+  - {host: felis.alice-bob.com, path: /.well-known/openid-configuration, status: 404, content_type: 'text/html; charset=utf-8', result: miss}
+  - {host: felis.alice-bob.com, path: /.well-known/oauth-authorization-server, status: 404, content_type: 'text/html; charset=utf-8', result: miss}
+  - {host: felis.alice-bob.com, path: /.well-known/api-catalog, status: 404, content_type: 'text/html; charset=utf-8', result: miss}
+  - {host: felis.alice-bob.com, path: /.well-known/ai-plugin.json, status: 404, content_type: 'text/html; charset=utf-8', result: miss}
+  - {host: felis.alice-bob.com, path: /.well-known/agent-card.json, status: 404, content_type: 'text/html; charset=utf-8', result: miss}
+  - {host: felis.alice-bob.com, path: /.well-known/agent.json, status: 404, content_type: 'text/html; charset=utf-8', result: miss}
+  - {host: felis.alice-bob.com, path: /llms.txt, status: 404, content_type: 'text/html; charset=utf-8', result: miss}
+  - {host: felis.alice-bob.com, path: /robots.txt, status: 404, content_type: 'text/html; charset=utf-8', result: miss}
+  - {host: alice-bob.com, path: /.well-known/security.txt, status: 202, content_type: text/html, result: bot-challenge}
+  - {host: alice-bob.com, path: /.well-known/agent-card.json, status: 202, content_type: text/html, result: bot-challenge}
+  - {host: alice-bob.com, path: /.well-known/agent.json, status: 202, content_type: text/html, result: bot-challenge}
+  - {host: alice-bob.com, path: /.well-known/api-catalog, status: 202, content_type: text/html, result: bot-challenge}
+  - {host: alice-bob.com, path: /llms.txt, status: 202, content_type: text/html, result: bot-challenge}
+  - {host: alice-bob.com, path: /robots.txt, status: 202, content_type: text/html, result: bot-challenge}
+
+notes: >-
+  The 202 responses from alice-bob.com carry the header `sg-captcha: challenge` and a
+  169-180 byte body that meta-refreshes to /.well-known/sgcaptcha/. They are challenge
+  interstitials, not content, and were NOT counted as hits. The A2A probe therefore
+  produced no agent card anywhere; per the pipeline contract no a2a/ artifact was
+  authored on the provider's behalf.

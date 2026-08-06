@@ -1,0 +1,111 @@
+generated: '2026-08-06'
+method: derived
+format: fastapi-json
+source: >-
+  Derived from the 4xx/5xx responses declared in
+  openapi/alice--bob-felis-cloud-openapi.json (OpenAPI 3.1.0, 14 operations), plus the
+  gateway error body observed live on https://api-gcp.alice-bob.com/v1/health/ (401) and
+  the JobError / EventType schemas that carry in-band execution failures.
+description: >-
+  The Felis Cloud API is FastAPI-generated and does NOT use RFC 9457
+  application/problem+json. There are two distinct error envelopes — an edge/gateway
+  envelope for authentication failures and the FastAPI validation envelope for request
+  errors — and a third, in-band failure channel: a job that fails after acceptance reports
+  it through its own `events[]` and `errors[]` arrays with HTTP 200, not through an HTTP
+  error status.
+rfc9457: false
+
+envelopes:
+  - name: gateway
+    media_type: application/json
+    shape: '{"error": {"code": <int>, "message": <string>}}'
+    emitted_by: The API edge in front of api-gcp.alice-bob.com / api.alice-bob.com
+    declared_in_spec: false
+    evidence: 'GET https://api-gcp.alice-bob.com/v1/health/ with no Authorization header -> 401 {"error":{"code":401,"message":"Unauthorized"}} (probed 2026-08-06)'
+  - name: fastapi-validation
+    media_type: application/json
+    shape: '{"detail": [{"loc": [string|integer, ...], "msg": string, "type": string}]}'
+    schema: HTTPValidationError
+    item_schema: ValidationError
+    declared_in_spec: true
+
+validation_error_shape:
+  schema: HTTPValidationError
+  item_schema: ValidationError
+  fields:
+    - {name: loc, type: array<string|integer>, required: true, description: 'Path to the offending field (e.g. path/job_id, query/limit).'}
+    - {name: msg, type: string, required: true, description: Human-readable validation message.}
+    - {name: type, type: string, required: true, description: Machine error type.}
+
+problems:
+  - status: 401
+    title: Unauthorized
+    envelope: gateway
+    media_type: application/json
+    declared_in_spec: false
+    meaning: >-
+      No API key was presented, or the presented key is unknown, revoked, or not attached to
+      an active Felis Cloud subscription. Returned for every path on the API host, including
+      /.well-known/* — the host is authenticated by default.
+    remediation: >-
+      Send `Authorization: Basic <API key>` with the raw key. Create or rotate a key in the
+      console at https://api-gcp.alice-bob.com/console/ ("API KEYS" tab). A Felis Cloud
+      subscription via Google Cloud Marketplace is a prerequisite.
+    spec_gap: true
+  - status: 422
+    title: Unprocessable Entity (Validation Error)
+    envelope: fastapi-validation
+    media_type: application/json
+    schema: HTTPValidationError
+    declared_in_spec: true
+    applies_to: 13 of the 14 operations (all except list_targets_v1_targets__get)
+    meaning: >-
+      The request failed validation — a malformed job_id (must be a UUID), an out-of-range
+      `limit` (0..1000 on list jobs), an unknown target name, or a create-job body that
+      violates CreateExternalJob (which sets additionalProperties:false, so unknown fields
+      are rejected).
+    remediation: >-
+      Read detail[].loc for the offending field and detail[].msg for the reason; correct the
+      request and retry. Validate target names against GET /v1/targets/ first.
+
+# Failures that occur AFTER a job is accepted are reported in-band on a 200 response.
+in_band_job_failures:
+  channel: 'GET /v1/jobs/{job_id} -> ExternalJob.events[] (JobEvent.type) and ExternalJob.errors[] (JobError.content)'
+  http_status: 200
+  note: >-
+    The spec types JobError.content as a free-form object with no enumerated code registry,
+    so there is no published catalog of job failure codes. The terminal event type is the
+    machine-readable failure signal.
+  terminal_states:
+    - event: SUCCEEDED
+      meaning: Execution completed; results available at /output and /memory.
+    - event: COMPILATION_FAILED
+      meaning: The uploaded QIR could not be compiled.
+      remediation: Re-check the QIR against the QIR spec and the target gate set (GET /v1/targets/).
+    - event: TRANSPILATION_FAILED
+      meaning: The circuit could not be transpiled to the target's supported instruction set.
+      remediation: >-
+        Inspect TargetConfiguration.instructions for the target; physical cat-qubit backends
+        deliberately omit non-bias-preserving gates such as Hadamard.
+    - event: EXECUTION_FAILED
+      meaning: The job failed while running on the target.
+    - event: CANCELLED
+      meaning: 'The job was cancelled via DELETE /v1/jobs/{job_id}.'
+    - event: TIMED_OUT
+      meaning: The job exceeded the platform limit.
+      remediation: >-
+        Felis Cloud caps job duration at 15 minutes so a single user cannot monopolise the
+        shared Boson 4 chip; split long experiments into multiple jobs or contact Alice & Bob
+        for exclusive access.
+
+undeclared_statuses:
+  note: >-
+    No 403, 404, 409, 429 or 5xx response is declared on any operation. A request for another
+    tenant's job id, or for a job that does not exist, has no documented status. This is a
+    real gap in the published contract, not an omission of this catalog.
+
+gaps:
+  - The 401 the edge actually returns is absent from the OpenAPI entirely.
+  - No error-code registry exists for JobError.content.
+  - No 404 is declared for GET/DELETE /v1/jobs/{job_id} despite the path being addressable by client-supplied id.
+  - No 429 or rate-limit error is declared; see conventions/alice--bob-conventions.yml.

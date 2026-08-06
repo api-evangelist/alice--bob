@@ -1,0 +1,102 @@
+generated: '2026-08-06'
+method: derived
+source: >-
+  Derived from openapi/alice--bob-felis-cloud-openapi.json and from live probes on
+  2026-08-06 of api-gcp.alice-bob.com, api.alice-bob.com, felis.alice-bob.com and
+  alice-bob.com; cross-read against https://felis.alice-bob.com/docs/reference/the_api/.
+description: >-
+  Cross-cutting standards posture of Alice & Bob's public API surface. The one standard the
+  company conforms to strongly is a domain standard, not a web-API one: circuits are
+  submitted in QIR, the QIR Alliance intermediate representation, and the client library is
+  built on Qiskit. On the web-API side the surface is a plain FastAPI service — an OpenAPI
+  3.1.0 document is published unauthenticated, and essentially nothing else.
+standards:
+  - id: openapi
+    conforms: true
+    version: 3.1.0
+    evidence: >-
+      A parseable OpenAPI 3.1.0 document with 14 operations and 18 schemas is served
+      unauthenticated at https://api-gcp.alice-bob.com/openapi.json (200) and identically at
+      https://api.alice-bob.com/openapi.json (200), and rendered as ReDoc at
+      https://api-gcp.alice-bob.com/reference (200).
+  - id: qir
+    conforms: true
+    evidence: >-
+      InputDataFormat is the single const HUMAN_QIR and the API description links the QIR
+      Alliance specification (https://github.com/qir-alliance/qir-spec) as the required input
+      format for every job.
+  - id: qiskit
+    conforms: true
+    evidence: >-
+      First-party open-source Qiskit provider (qiskit-alice-bob-provider, Apache-2.0, PyPI),
+      documented as the reference implementation of the API.
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: >-
+      No application/problem+json anywhere. Errors use the FastAPI `{"detail": [...]}`
+      envelope, and the edge returns a different `{"error":{"code":..,"message":..}}` shape.
+  - id: oauth2
+    conforms: false
+    evidence: >-
+      No oauth2 security scheme in the spec and no OAuth endpoints. Authentication is a static
+      API key in the Authorization header.
+  - id: oidc
+    conforms: false
+    evidence: '/.well-known/openid-configuration returns 401 on api-gcp.alice-bob.com and 404 on felis.alice-bob.com.'
+  - id: rfc8414-authorization-server-metadata
+    conforms: false
+    evidence: '/.well-known/oauth-authorization-server returns 401 (host-wide auth) on the API hosts, 404 on the docs host.'
+  - id: rfc9116-security-txt
+    conforms: false
+    evidence: >-
+      No /.well-known/security.txt found. 401 on the API hosts, 404 on felis.alice-bob.com,
+      and 202 captcha challenge on alice-bob.com.
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: No Sunset or Deprecation header and no deprecation policy is published; see lifecycle/alice--bob-lifecycle.yml.
+  - id: rfc9421-http-message-signatures
+    conforms: false
+    evidence: Not documented and not present in the spec.
+  - id: mcp
+    conforms: false
+    evidence: >-
+      No hosted or published Model Context Protocol server was found on any Alice & Bob host
+      or in the Alice-Bob-SW GitHub organization (11 public repos enumerated).
+  - id: a2a
+    conforms: false
+    evidence: >-
+      /.well-known/agent-card.json and /.well-known/agent.json probed on api-gcp.alice-bob.com
+      (401), felis.alice-bob.com (404) and alice-bob.com (202 captcha). No agent card exists.
+  - id: asyncapi
+    conforms: false
+    applicable: false
+    evidence: >-
+      No event, streaming or webhook surface exists. Job completion is discovered by polling
+      GET /v1/jobs/{job_id}. Not penalised — there is nothing to describe.
+  - id: graphql
+    conforms: false
+    evidence: No /graphql surface on any host.
+  - id: grpc
+    conforms: false
+    evidence: No .proto published in the GitHub organization or on buf.build.
+  - id: pagination
+    conforms: partial
+    evidence: >-
+      Both collection endpoints paginate, but with different idioms — page/limit on
+      GET /v1/jobs/ and limit/offset on GET /v1/targets/{target}/availabilities — and neither
+      returns a total or a next link.
+  - id: idempotency
+    conforms: false
+    evidence: >-
+      No idempotency key or replay mechanism is documented or present in the spec; a retried
+      POST /v1/jobs/ creates a second billable job.
+  - id: llmstxt
+    conforms: false
+    evidence: /llms.txt returns 404 on felis.alice-bob.com and a 202 captcha challenge on alice-bob.com.
+
+certifications:
+  published: []
+  note: >-
+    No SOC 2, ISO 27001, PCI, HIPAA or FedRAMP claim was found on any reachable Alice & Bob
+    surface, and no trust centre exists at trust.alice-bob.com (NXDOMAIN). No Compliance
+    pointer is wired.

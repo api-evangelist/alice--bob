@@ -1,0 +1,88 @@
+generated: '2026-08-06'
+method: searched
+source: https://felis.alice-bob.com/docs/reference/changelog/
+description: >-
+  Alice & Bob publishes one changelog, and it covers the qiskit-alice-bob-provider client
+  library rather than the Felis Cloud REST API. Entries are keyed by semver release with no
+  dates on the page; release dates below are taken from the PyPI upload timestamps for the
+  same versions. Breaking changes to the developer surface — including the migration of the
+  default API host to api-gcp.alice-bob.com — have only ever been announced here.
+docs: https://felis.alice-bob.com/docs/reference/changelog/
+scope: qiskit-alice-bob-provider (client library)
+api_changelog: null
+
+versioning:
+  scheme: semver
+  artifact: qiskit-alice-bob-provider (PyPI)
+  current_stable: 1.2.0
+  current_prerelease: 1.3.0b4
+  prerelease_date: '2025-09-30'
+  detail: lifecycle/alice--bob-lifecycle.yml
+
+entries:
+  - version: 1.1.1
+    breaking: []
+    additions:
+      - >-
+        get_memory() support for the remote provider — passing memory=True to backend.run()
+        stores each individual shot, retrievable via result.get_memory(). Brings the remote
+        provider to parity with the local provider; enables using a Boson 4 chip as a random
+        number generator.
+  - version: 1.1.0
+    breaking:
+      - Dropped support for Python 3.8.
+      - >-
+        Alice & Bob custom options (e.g. average_nb_photons) are no longer accepted on
+        backend.run() with the local provider — they must be passed to provider.get_backend().
+    additions:
+      - Migrated to Qiskit 1.3; default optimization_level for backend.transpile() raised from 1 to 2.
+      - Transpilation fixed for backend targets with a Clifford + T only basis (CRY, RCCX, RCCCX still broken on macOS).
+  - version: 1.0.0
+    breaking:
+      - Migrated to Qiskit 1.2 — qiskit execute() removed in favour of transpile() + backend.run().
+      - circuit.cnot() must now be declared as circuit.cx().
+      - Python environments built against earlier Qiskit versions must be recreated.
+      - get_backend() options no longer mutate the provider object's default options for that backend.
+    additions: []
+  - version: 0.7.2
+    breaking: []
+    additions: [Bumped twine to 5.1.1.]
+  - version: 0.7.1
+    breaking: []
+    additions: [Job status displayed with ipywidget in notebooks.]
+  - version: 0.7.0
+    breaking:
+      - Deprecated Python 3.7 (ARM users could not install; numpy has no 3.7 ARM build).
+      - Pinned maximum supported Python to 3.11 (3.12+ setuptools changes).
+      - >-
+        Changed the default remote API URL from api.alice-bob.com to api-gcp.alice-bob.com,
+        following the release of Felis Cloud on Google Cloud Platform.
+    additions:
+      - Warning emitted when instantiating AliceBobRemoteProvider if a newer provider release exists on PyPI.
+  - version: 0.6.0
+    breaking: []
+    additions: [Improved feedback while running circuits with the remote provider.]
+  - version: 0.5.4
+    breaking: []
+    additions: [TDG gate supported on remote logical backends.]
+  - version: 0.5.3
+    breaking: []
+    additions: [Fixed a transpilation issue blocking logical backends on the remote provider.]
+  - version: 0.5.2
+    breaking: []
+    additions: [Fixed transpilation of cswap on logical backends.]
+  - version: 0.5.1
+    breaking: []
+    additions: [Improved transpilation and scheduling for local backends, notably for QASM-imported programs.]
+  - version: 0.5.0
+    breaking: []
+    additions: [Harmonised get_backend() behaviour between remote and local providers.]
+  - version: 0.4.2
+    breaking: []
+    additions: [Released multi-qubit logical and physical targets on the remote provider.]
+  - version: 0.4.1
+    breaking: []
+    additions: [Python 3.11 support.]
+  - version: 0.4.0
+    breaking: []
+    additions: ['Added logical backends EMU:15Q:LOGICAL_EARLY and EMU:40Q:LOGICAL_TARGET.']
