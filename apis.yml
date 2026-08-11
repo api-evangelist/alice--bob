@@ -31,23 +31,44 @@ tags:
 - Qiskit
 - QIR
 apis:
-- name: Felis Cloud API
-  description: 'The Felis Cloud API runs quantum circuits on Alice & Bob''s emulators
-    and real cat-qubit quantum hardware. A client creates a job against a named target
-    (listed by List Targets), uploads the circuit as QIR, polls job status, and downloads
-    the histogram output, per-shot memory, transpiled QIR and execution metrics. The
-    same API backs the open-source Qiskit provider.'
+- aid: alice--bob:alice--bob-health-api
+  name: Alice Bob Health API
+  description: The Health API from Alice Bob — 1 operation(s) for health.
   humanURL: https://felis.alice-bob.com/docs/reference/the_api/
   baseURL: https://api-gcp.alice-bob.com/v1
   tags:
-  - Quantum Computing
-  - Jobs
-  - Emulation
+  - Health
   properties:
   - type: OpenAPI
-    url: openapi/alice--bob-felis-cloud-openapi.json
-  - type: Overlay
-    url: overlays/alice--bob-felis-cloud-overlay.yaml
+    url: openapi/alice--bob-health-api-openapi.yml
+  - type: Documentation
+    url: https://felis.alice-bob.com/docs/
+  - type: APIReference
+    url: https://api-gcp.alice-bob.com/reference
+- aid: alice--bob:alice--bob-jobs-api
+  name: Alice Bob Jobs API
+  description: The Jobs API from Alice Bob — 7 operation(s) for jobs.
+  humanURL: https://felis.alice-bob.com/docs/reference/the_api/
+  baseURL: https://api-gcp.alice-bob.com/v1
+  tags:
+  - Jobs
+  properties:
+  - type: OpenAPI
+    url: openapi/alice--bob-jobs-api-openapi.yml
+  - type: Documentation
+    url: https://felis.alice-bob.com/docs/
+  - type: APIReference
+    url: https://api-gcp.alice-bob.com/reference
+- aid: alice--bob:alice--bob-targets-api
+  name: Alice Bob Targets API
+  description: The Targets API from Alice Bob — 3 operation(s) for targets.
+  humanURL: https://felis.alice-bob.com/docs/reference/the_api/
+  baseURL: https://api-gcp.alice-bob.com/v1
+  tags:
+  - Targets
+  properties:
+  - type: OpenAPI
+    url: openapi/alice--bob-targets-api-openapi.yml
   - type: Documentation
     url: https://felis.alice-bob.com/docs/
   - type: APIReference
@@ -58,6 +79,10 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: MCPServer
+  url: mcp/alice--bob-mcp.yml
+- type: Overlay
+  url: overlays/alice--bob-felis-cloud-overlay.yaml
 - type: DomainSecurity
   url: security/alice--bob-domain-security.yml
 - type: Website
