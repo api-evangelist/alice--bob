@@ -1,0 +1,581 @@
+openapi: 3.2.0
+info:
+  title: Felis Cloud • API Reference Jobs API
+  summary: '**Run quantum circuits on Alice & Bob''s emulators and real quantum hardware.**'
+  description: 'The Felis Cloud API lets you execute quantum circuits on emulators and real quantum hardware made by Alice & Bob.
+
+
+    To run a circuit with the API:
+
+    - Create a job with "Create Job", targeting a specific backend (listed by  "List Targets").
+
+    - Upload the input quantum code of your job in [QIR format](https://github.com/qir-alliance/qir-spec) with "Upload Input".
+
+    - Monitor the job''s status with "Get Job".
+
+    - Read the results with "Download Output".
+
+
+    The execution stack includes a transpilation step to adapt the input code to the target''s gate set. The result of the transpilation can be seen with "Download Transpiled".
+
+
+    This API is used by [Alice & Bob''s Qiskit provider](https://github.com/Alice-Bob-SW/qiskit-alice-bob-provider), which also serves as a reference implementation.
+
+
+    Using this API requires an API key in the authorization header. Please reach out to Alice & Bob athttps://alice-bob.com/products/quantum-cloud-felis to learn how to get one.'
+  version: 0.1.0
+servers:
+- url: /external
+tags:
+- name: Jobs
+paths:
+  /v1/jobs/:
+    get:
+      summary: List Jobs
+      description: Return all active and completed jobs associated with the authenticated user.
+      operationId: list_jobs_v1_jobs__get
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 0
+          default: 100
+          title: Limit
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExternalJob'
+                title: Response List Jobs V1 Jobs  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Jobs
+    post:
+      summary: Create Job
+      description: Create a new job to be run on a specific target. The job's code needs to be uploaded separately using "Upload Input" to start running.
+      operationId: create_job_v1_jobs__post
+      parameters:
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateExternalJob'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalJob'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Jobs
+  /v1/jobs/{job_id}:
+    get:
+      summary: Get Job
+      description: Get details on a given job.
+      operationId: get_job_v1_jobs__job_id__get
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Job Id
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalJob'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Jobs
+    delete:
+      summary: Cancel Job
+      description: Cancel a given active job.
+      operationId: cancel_job_v1_jobs__job_id__delete
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Job Id
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalJob'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Jobs
+  /v1/jobs/{job_id}/input:
+    post:
+      summary: Upload Input
+      description: Upload the input code for a job in QIR format to trigger its execution (provided that the target is available).
+      operationId: upload_input_v1_jobs__job_id__input_post
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Job Id
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_upload_input_v1_jobs__job_id__input_post'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Jobs
+    get:
+      summary: Download Input
+      description: Return the raw input QIR code of a given job as it was submitted to the API.
+      operationId: download_input_v1_jobs__job_id__input_get
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Job Id
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Jobs
+  /v1/jobs/{job_id}/transpiled:
+    get:
+      summary: Download Transpiled
+      description: Return the QIR code of a given job transpiled for the specificities of the target's gate set.
+      operationId: download_transpiled_v1_jobs__job_id__transpiled_get
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Job Id
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Jobs
+  /v1/jobs/{job_id}/output:
+    get:
+      summary: Download Output
+      description: Return the results of a given job as a list of measurements with their number of occurrences.
+      operationId: download_output_v1_jobs__job_id__output_get
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Job Id
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Jobs
+  /v1/jobs/{job_id}/memory:
+    get:
+      summary: Download Memory
+      description: Return the results of a given job as a list of measurements of each shot
+      operationId: download_memory_v1_jobs__job_id__memory_get
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Job Id
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Jobs
+  /v1/jobs/{job_id}/metrics:
+    get:
+      summary: Get Job Metrics
+      description: 'Return recorded metrics about the job:
+
+        > `qpu_duration_ns`: duration recorded executing a circuit on a QPU, in nanoseconds.
+
+        > `simulation_duration_ns`: duration recorded simulating a circuit, in nanoseconds.'
+      operationId: get_job_metrics_v1_jobs__job_id__metrics_get
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Job Id
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalJobMetrics'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Jobs
+components:
+  schemas:
+    JobError:
+      properties:
+        content:
+          type: object
+          title: Content
+      additionalProperties: false
+      type: object
+      required:
+      - content
+      title: JobError
+    InputDataFormat:
+      const: HUMAN_QIR
+      title: InputDataFormat
+    EventType:
+      type: string
+      enum:
+      - CREATED
+      - FETCHING_INPUT
+      - INPUT_READY
+      - COMPILING
+      - COMPILED
+      - COMPILATION_FAILED
+      - TRANSPILING
+      - TRANSPILED
+      - TRANSPILATION_FAILED
+      - EXECUTING
+      - SUCCEEDED
+      - EXECUTION_FAILED
+      - CANCELLED
+      - TIMED_OUT
+      title: EventType
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ExternalJob:
+      properties:
+        inputDataFormat:
+          $ref: '#/components/schemas/InputDataFormat'
+        outputDataFormat:
+          $ref: '#/components/schemas/OutpuDataFormat'
+        target:
+          type: string
+          title: Target
+        inputParams:
+          type: object
+          title: Inputparams
+        id:
+          type: string
+          title: Id
+        userName:
+          type: string
+          title: Username
+        userId:
+          type: string
+          title: Userid
+        organizationName:
+          type: string
+          title: Organizationname
+        events:
+          items:
+            $ref: '#/components/schemas/JobEvent'
+          type: array
+          title: Events
+        errors:
+          items:
+            $ref: '#/components/schemas/JobError'
+          type: array
+          title: Errors
+      type: object
+      required:
+      - inputDataFormat
+      - outputDataFormat
+      - target
+      - inputParams
+      - id
+      - userName
+      - userId
+      - organizationName
+      - events
+      - errors
+      title: ExternalJob
+    JobEvent:
+      properties:
+        type:
+          $ref: '#/components/schemas/EventType'
+        createdAt:
+          type: string
+          format: date-time
+          title: Createdat
+      additionalProperties: false
+      type: object
+      required:
+      - type
+      - createdAt
+      title: JobEvent
+    ExternalJobMetrics:
+      properties:
+        qpu_duration_ns:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Qpu Duration Ns
+        simulation_duration_ns:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Simulation Duration Ns
+      type: object
+      title: ExternalJobMetrics
+      description: 'Job metrics we wish to expose to external users.
+
+        We define aliases to match the external metric names to the internal ones,
+
+        that correspond more closely to what we record.'
+    CreateExternalJob:
+      properties:
+        inputDataFormat:
+          $ref: '#/components/schemas/InputDataFormat'
+        outputDataFormat:
+          $ref: '#/components/schemas/OutpuDataFormat'
+        target:
+          type: string
+          title: Target
+        inputParams:
+          type: object
+          title: Inputparams
+      additionalProperties: false
+      type: object
+      required:
+      - inputDataFormat
+      - outputDataFormat
+      - target
+      - inputParams
+      title: CreateExternalJob
+    OutpuDataFormat:
+      const: HISTOGRAM
+      title: OutpuDataFormat
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    Body_upload_input_v1_jobs__job_id__input_post:
+      properties:
+        input:
+          type: string
+          format: binary
+          title: Input
+      type: object
+      required:
+      - input
+      title: Body_upload_input_v1_jobs__job_id__input_post

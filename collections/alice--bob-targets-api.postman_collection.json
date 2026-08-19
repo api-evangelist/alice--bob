@@ -1,0 +1,411 @@
+{
+  "item": [
+    {
+      "id": "176ed775-39ed-433f-a08b-a993aa33efcc",
+      "name": "Targets",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "237c7d8a-0004-4bc2-823f-e1bb8215293f",
+          "name": "List Targets",
+          "request": {
+            "name": "List Targets",
+            "description": {
+              "content": "Return the list of all targets to execute the jobs on. These targets can be emulators or real quantum hardware.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "targets",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1afa7f31-c69d-47f9-bdeb-b067115198a6",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "targets",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"name\": \"string\",\n    \"numQubits\": 8887,\n    \"instructions\": [\n      {\n        \"signature\": \"string\"\n      },\n      {\n        \"signature\": \"string\"\n      }\n    ],\n    \"inputParams\": {\n      \"key_0\": {\n        \"required\": false,\n        \"type\": \"float\",\n        \"default\": {},\n        \"constraints\": [\n          {\n            \"min\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"min\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"key_1\": {\n        \"required\": false,\n        \"type\": \"int\",\n        \"default\": {},\n        \"constraints\": [\n          {\n            \"min\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"min\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"key_2\": {\n        \"required\": false,\n        \"type\": \"bool\",\n        \"default\": {},\n        \"constraints\": [\n          {\n            \"min\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"min\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"key_3\": {\n        \"required\": false,\n        \"type\": \"int\",\n        \"default\": {},\n        \"constraints\": [\n          {\n            \"min\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"min\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"key_4\": {\n        \"required\": true,\n        \"type\": \"float\",\n        \"default\": {},\n        \"constraints\": [\n          {\n            \"min\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"min\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    }\n  },\n  {\n    \"name\": \"string\",\n    \"numQubits\": 8777,\n    \"instructions\": [\n      {\n        \"signature\": \"string\"\n      },\n      {\n        \"signature\": \"string\"\n      }\n    ],\n    \"inputParams\": {\n      \"key_0\": {\n        \"required\": false,\n        \"type\": \"float\",\n        \"default\": {},\n        \"constraints\": [\n          {\n            \"min\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"min\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"key_1\": {\n        \"required\": true,\n        \"type\": \"bool\",\n        \"default\": {},\n        \"constraints\": [\n          {\n            \"min\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"min\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7faa8775-cae0-408b-892c-e7e332cbb7a4",
+          "name": "Target Status",
+          "request": {
+            "name": "Target Status",
+            "description": {
+              "content": "Return the current status of a target:\n\"OK\" if the target is enabled and in a working state.\n\"NOK\" if the target is enabled but monitored to be in a bad state.\n\"OFF\" if the target is disabled at this given time.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "targets",
+                ":target",
+                "health"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "target",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ab938fa1-97db-4a67-b3f7-5ae1ae056125",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "targets",
+                    ":target",
+                    "health"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"OFF\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c18b593e-3141-4872-b73e-436b28bb9a16",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "targets",
+                    ":target",
+                    "health"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fd83919a-8204-44b7-9bf7-d11845a06b38",
+          "name": "List Target Availabilities",
+          "request": {
+            "name": "List Target Availabilities",
+            "description": {
+              "content": "Get the latest entries of a target's planned availabilities.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "targets",
+                ":target",
+                "availabilities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "target",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "dbf9b66b-f886-4d8e-a460-8c2a4cda2883",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "targets",
+                    ":target",
+                    "availabilities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"enabled\": false,\n    \"id\": \"string\",\n    \"target\": \"string\",\n    \"createdAt\": \"1994-05-29T23:46:32.462Z\",\n    \"timestamp\": \"1958-08-05T07:18:07.091Z\",\n    \"message\": \"string\"\n  },\n  {\n    \"enabled\": false,\n    \"id\": \"string\",\n    \"target\": \"string\",\n    \"createdAt\": \"1966-09-21T14:14:54.497Z\",\n    \"timestamp\": \"1991-03-15T06:14:24.696Z\",\n    \"message\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b6edefb3-c7c8-4c7d-885a-a2882a046551",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "targets",
+                    ":target",
+                    "availabilities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/external",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "16f1f971-8975-41a4-af48-03b579d90d9f",
+    "name": "Felis Cloud • API Reference Targets API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Felis Cloud API lets you execute quantum circuits on emulators and real quantum hardware made by Alice & Bob.\n\nTo run a circuit with the API:\n- Create a job with \"Create Job\", targeting a specific backend (listed by  \"List Targets\").\n- Upload the input quantum code of your job in [QIR format](https://github.com/qir-alliance/qir-spec) with \"Upload Input\".\n- Monitor the job's status with \"Get Job\".\n- Read the results with \"Download Output\".\n\nThe execution stack includes a transpilation step to adapt the input code to the target's gate set. The result of the transpilation can be seen with \"Download Transpiled\".\n\nThis API is used by [Alice & Bob's Qiskit provider](https://github.com/Alice-Bob-SW/qiskit-alice-bob-provider), which also serves as a reference implementation.\n\nUsing this API requires an API key in the authorization header. Please reach out to Alice & Bob athttps://alice-bob.com/products/quantum-cloud-felis to learn how to get one.",
+      "type": "text/plain"
+    }
+  }
+}

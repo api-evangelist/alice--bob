@@ -2,54 +2,103 @@ generated: '2026-08-06'
 method: derived
 status: candidate
 published_by_provider: false
-source: >-
-  Derived from openapi/alice--bob-felis-cloud-openapi.json. Alice & Bob publishes NO MCP
-  server: no hosted endpoint was found on any Alice & Bob host, no MCP repository exists in
-  the Alice-Bob-SW GitHub organization (all 11 public repos enumerated 2026-08-06), and no
-  Alice & Bob server appears in public MCP directories.
-description: >-
-  A CANDIDATE tool surface, not a real one. This file records what an MCP server over the
-  Felis Cloud API would expose if Alice & Bob built one, derived one-to-one from the published
-  OpenAPI operations. No `MCPServer` pointer is wired into apis.yml, because no server exists —
-  wiring one would credit Alice & Bob with an agent surface it does not have.
+source: 'Derived from openapi/alice--bob-felis-cloud-openapi.json. Alice & Bob publishes NO MCP server:
+  no hosted endpoint was found on any Alice & Bob host, no MCP repository exists in the Alice-Bob-SW GitHub
+  organization (all 11 public repos enumerated 2026-08-06), and no Alice & Bob server appears in public
+  MCP directories.'
+description: A CANDIDATE tool surface, not a real one. This file records what an MCP server over the Felis
+  Cloud API would expose if Alice & Bob built one, derived one-to-one from the published OpenAPI operations.
+  No `MCPServer` pointer is wired into apis.yml, because no server exists — wiring one would credit Alice
+  & Bob with an agent surface it does not have.
 searched:
-  - {target: 'mcp.alice-bob.com / api-gcp.alice-bob.com MCP endpoints', result: none}
-  - {target: 'github.com/Alice-Bob-SW (11 public repos)', result: none}
-  - {target: 'web search for an Alice & Bob / Felis Cloud MCP server', result: none}
-
+- target: mcp.alice-bob.com / api-gcp.alice-bob.com MCP endpoints
+  result: none
+- target: github.com/Alice-Bob-SW (11 public repos)
+  result: none
+- target: web search for an Alice & Bob / Felis Cloud MCP server
+  result: none
 candidate_server:
   name: alice-bob-felis-cloud
   transport: http
   url: null
   auth:
-    methods: [apikey]
+    methods:
+    - apikey
     apikey:
       header: Authorization
-      value_format: 'Basic <API key>'
+      value_format: Basic <API key>
       env: ALICE_BOB_API_KEY
       note: See authentication/alice--bob-authentication.yml.
   base_url: https://api-gcp.alice-bob.com/v1
-
-# Each candidate tool binds 1:1 to a real operationId in the published spec. The inputSchema
-# for each is that operation's parameters + requestBody — real, not fabricated.
 candidate_tools:
-  - {name: list_targets, category: catalog, rest: list_targets_v1_targets__get, description: 'List the emulator and QPU backends available, with qubit count, supported instructions and tunable input parameters.'}
-  - {name: get_target_status, category: catalog, rest: target_status_v1_targets__target__health_get, description: 'Get a target''s current status: OK, NOK or OFF.'}
-  - {name: list_target_availabilities, category: catalog, rest: list_target_availabilities_v1_targets__target__availabilities_get, description: List the latest planned availability entries for a target.}
-  - {name: create_job, category: execution, rest: create_job_v1_jobs__post, description: 'Create a job against a target, declaring input format (HUMAN_QIR), output format (HISTOGRAM) and per-target input parameters.', consequence: billable}
-  - {name: upload_job_input, category: execution, rest: upload_input_v1_jobs__job_id__input_post, description: Upload the QIR circuit for a job, triggering execution., consequence: billable}
-  - {name: get_job, category: execution, rest: get_job_v1_jobs__job_id__get, description: Get a job with its event history and any errors.}
-  - {name: list_jobs, category: execution, rest: list_jobs_v1_jobs__get, description: List the caller's active and completed jobs (page/limit).}
-  - {name: cancel_job, category: execution, rest: cancel_job_v1_jobs__job_id__delete, description: Cancel an active job., consequence: destructive}
-  - {name: download_job_output, category: results, rest: download_output_v1_jobs__job_id__output_get, description: Download the measurement histogram for a completed job.}
-  - {name: download_job_memory, category: results, rest: download_memory_v1_jobs__job_id__memory_get, description: Download per-shot measurement results.}
-  - {name: download_job_transpiled, category: results, rest: download_transpiled_v1_jobs__job_id__transpiled_get, description: Download the QIR as transpiled to the target's gate set.}
-  - {name: download_job_input, category: results, rest: download_input_v1_jobs__job_id__input_get, description: Download the QIR as originally submitted.}
-  - {name: get_job_metrics, category: results, rest: get_job_metrics_v1_jobs__job_id__metrics_get, description: 'Get qpu_duration_ns and simulation_duration_ns for a job.'}
-  - {name: check_health, category: platform, rest: check_health_v1_health__get, description: Check that the Felis Cloud API is up.}
-
-notes: >-
-  Two of these operations move money: create_job and upload_job_input together start a billable
-  execution at up to $5,000/hour on a Boson 4 QPU, and the API has NO idempotency mechanism, so
-  a retried call bills twice. Any real MCP server over this API would need an explicit
-  confirmation step on those two tools and on cancel_job.
+- name: list_targets
+  category: catalog
+  rest: list_targets_v1_targets__get
+  description: List the emulator and QPU backends available, with qubit count, supported instructions
+    and tunable input parameters.
+- name: get_target_status
+  category: catalog
+  rest: target_status_v1_targets__target__health_get
+  description: 'Get a target''s current status: OK, NOK or OFF.'
+- name: list_target_availabilities
+  category: catalog
+  rest: list_target_availabilities_v1_targets__target__availabilities_get
+  description: List the latest planned availability entries for a target.
+- name: create_job
+  category: execution
+  rest: create_job_v1_jobs__post
+  description: Create a job against a target, declaring input format (HUMAN_QIR), output format (HISTOGRAM)
+    and per-target input parameters.
+  consequence: billable
+- name: upload_job_input
+  category: execution
+  rest: upload_input_v1_jobs__job_id__input_post
+  description: Upload the QIR circuit for a job
+  triggering execution.: null
+  consequence: billable
+- name: get_job
+  category: execution
+  rest: get_job_v1_jobs__job_id__get
+  description: Get a job with its event history and any errors.
+- name: list_jobs
+  category: execution
+  rest: list_jobs_v1_jobs__get
+  description: List the caller's active and completed jobs (page/limit).
+- name: cancel_job
+  category: execution
+  rest: cancel_job_v1_jobs__job_id__delete
+  description: Cancel an active job.
+  consequence: destructive
+- name: download_job_output
+  category: results
+  rest: download_output_v1_jobs__job_id__output_get
+  description: Download the measurement histogram for a completed job.
+- name: download_job_memory
+  category: results
+  rest: download_memory_v1_jobs__job_id__memory_get
+  description: Download per-shot measurement results.
+- name: download_job_transpiled
+  category: results
+  rest: download_transpiled_v1_jobs__job_id__transpiled_get
+  description: Download the QIR as transpiled to the target's gate set.
+- name: download_job_input
+  category: results
+  rest: download_input_v1_jobs__job_id__input_get
+  description: Download the QIR as originally submitted.
+- name: get_job_metrics
+  category: results
+  rest: get_job_metrics_v1_jobs__job_id__metrics_get
+  description: Get qpu_duration_ns and simulation_duration_ns for a job.
+- name: check_health
+  category: platform
+  rest: check_health_v1_health__get
+  description: Check that the Felis Cloud API is up.
+notes: 'Two of these operations move money: create_job and upload_job_input together start a billable
+  execution at up to $5,000/hour on a Boson 4 QPU, and the API has NO idempotency mechanism, so a retried
+  call bills twice. Any real MCP server over this API would need an explicit confirmation step on those
+  two tools and on cancel_job.'
+deployment:
+  mode: none
+  verified: derived
+  checked: '2026-08-12'
+  source: catalog MCP census

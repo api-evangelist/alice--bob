@@ -1,0 +1,279 @@
+openapi: 3.2.0
+info:
+  title: Felis Cloud • API Reference Targets API
+  summary: '**Run quantum circuits on Alice & Bob''s emulators and real quantum hardware.**'
+  description: 'The Felis Cloud API lets you execute quantum circuits on emulators and real quantum hardware made by Alice & Bob.
+
+
+    To run a circuit with the API:
+
+    - Create a job with "Create Job", targeting a specific backend (listed by  "List Targets").
+
+    - Upload the input quantum code of your job in [QIR format](https://github.com/qir-alliance/qir-spec) with "Upload Input".
+
+    - Monitor the job''s status with "Get Job".
+
+    - Read the results with "Download Output".
+
+
+    The execution stack includes a transpilation step to adapt the input code to the target''s gate set. The result of the transpilation can be seen with "Download Transpiled".
+
+
+    This API is used by [Alice & Bob''s Qiskit provider](https://github.com/Alice-Bob-SW/qiskit-alice-bob-provider), which also serves as a reference implementation.
+
+
+    Using this API requires an API key in the authorization header. Please reach out to Alice & Bob athttps://alice-bob.com/products/quantum-cloud-felis to learn how to get one.'
+  version: 0.1.0
+servers:
+- url: /external
+tags:
+- name: Targets
+paths:
+  /v1/targets/:
+    get:
+      summary: List Targets
+      description: Return the list of all targets to execute the jobs on. These targets can be emulators or real quantum hardware.
+      operationId: list_targets_v1_targets__get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/TargetConfiguration'
+                type: array
+                title: Response List Targets V1 Targets  Get
+      tags:
+      - Targets
+  /v1/targets/{target}/health:
+    get:
+      summary: Target Status
+      description: 'Return the current status of a target:
+
+        "OK" if the target is enabled and in a working state.
+
+        "NOK" if the target is enabled but monitored to be in a bad state.
+
+        "OFF" if the target is disabled at this given time.'
+      operationId: target_status_v1_targets__target__health_get
+      parameters:
+      - name: target
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Target
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TargetStatus'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Targets
+  /v1/targets/{target}/availabilities:
+    get:
+      summary: List Target Availabilities
+      description: Get the latest entries of a target's planned availabilities.
+      operationId: list_target_availabilities_v1_targets__target__availabilities_get
+      parameters:
+      - name: target
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Target
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 100
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 0
+          title: Offset
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TargetAvailability'
+                title: Response List Target Availabilities V1 Targets  Target  Availabilities Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Targets
+components:
+  schemas:
+    TargetStatus:
+      type: string
+      enum:
+      - 'OFF'
+      - OK
+      - NOK
+      title: TargetStatus
+    Instruction:
+      properties:
+        signature:
+          type: string
+          title: Signature
+      additionalProperties: false
+      type: object
+      required:
+      - signature
+      title: Instruction
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    InputParamRangeConstraint:
+      properties:
+        min:
+          anyOf:
+          - type: number
+          - type: integer
+          title: Min
+        max:
+          anyOf:
+          - type: number
+          - type: integer
+          title: Max
+      type: object
+      required:
+      - min
+      - max
+      title: InputParamRangeConstraint
+    InputParamConfiguration:
+      properties:
+        required:
+          type: boolean
+          title: Required
+        type:
+          type: string
+          enum:
+          - float
+          - int
+          - bool
+          title: Type
+        default:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Default
+        constraints:
+          items:
+            $ref: '#/components/schemas/InputParamRangeConstraint'
+          type: array
+          title: Constraints
+      type: object
+      required:
+      - required
+      - type
+      - default
+      - constraints
+      title: InputParamConfiguration
+    TargetConfiguration:
+      properties:
+        name:
+          type: string
+          title: Name
+        numQubits:
+          type: integer
+          title: Numqubits
+        instructions:
+          items:
+            $ref: '#/components/schemas/Instruction'
+          type: array
+          title: Instructions
+        inputParams:
+          additionalProperties:
+            $ref: '#/components/schemas/InputParamConfiguration'
+          type: object
+          title: Inputparams
+      type: object
+      required:
+      - name
+      - numQubits
+      - instructions
+      - inputParams
+      title: TargetConfiguration
+    TargetAvailability:
+      properties:
+        timestamp:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Timestamp
+        enabled:
+          type: boolean
+          title: Enabled
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+        id:
+          type: string
+          title: Id
+        target:
+          type: string
+          title: Target
+        createdAt:
+          type: string
+          format: date-time
+          title: Createdat
+      additionalProperties: false
+      type: object
+      required:
+      - enabled
+      - id
+      - target
+      - createdAt
+      title: TargetAvailability
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError

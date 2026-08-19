@@ -1,0 +1,23 @@
+{
+  "provider": "alice--bob",
+  "sources": [
+    "alice--bob-health-api-openapi.yml",
+    "alice--bob-jobs-api-openapi.yml",
+    "alice--bob-targets-api-openapi.yml"
+  ],
+  "outputs": [
+    "alice--bob-health-api-openapi.yml",
+    "alice--bob-jobs-api-openapi.yml",
+    "alice--bob-targets-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "alice--bob-health-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "alice--bob-jobs-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "alice--bob-targets-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": []
+}

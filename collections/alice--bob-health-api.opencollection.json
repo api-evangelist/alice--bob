@@ -1,0 +1,35 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Felis Cloud • API Reference Health API",
+    "version": "0.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Health",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Check Health",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/external/v1/health/",
+            "headers": [
+              {
+                "name": "authorization",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Return \"OK\" if the Felis Cloud API is up and running."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

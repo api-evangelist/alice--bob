@@ -1,0 +1,155 @@
+{
+  "item": [
+    {
+      "id": "0aa711d7-7839-44fa-a025-08a909927d8f",
+      "name": "Health",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6d931c7c-befe-4268-a69c-2208447824e3",
+          "name": "Check Health",
+          "request": {
+            "name": "Check Health",
+            "description": {
+              "content": "Return \"OK\" if the Felis Cloud API is up and running.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "health",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ecebafde-4612-43da-8b21-dbf943350047",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "health",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "key": "authorization",
+                    "value": "string",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"string\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "88d11c37-da86-4a11-9c1f-146b3e19f615",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "health",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "key": "authorization",
+                    "value": "string",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/external",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "ab73aecd-35b6-422b-bc9c-953b708b7d54",
+    "name": "Felis Cloud • API Reference Health API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Felis Cloud API lets you execute quantum circuits on emulators and real quantum hardware made by Alice & Bob.\n\nTo run a circuit with the API:\n- Create a job with \"Create Job\", targeting a specific backend (listed by  \"List Targets\").\n- Upload the input quantum code of your job in [QIR format](https://github.com/qir-alliance/qir-spec) with \"Upload Input\".\n- Monitor the job's status with \"Get Job\".\n- Read the results with \"Download Output\".\n\nThe execution stack includes a transpilation step to adapt the input code to the target's gate set. The result of the transpilation can be seen with \"Download Transpiled\".\n\nThis API is used by [Alice & Bob's Qiskit provider](https://github.com/Alice-Bob-SW/qiskit-alice-bob-provider), which also serves as a reference implementation.\n\nUsing this API requires an API key in the authorization header. Please reach out to Alice & Bob athttps://alice-bob.com/products/quantum-cloud-felis to learn how to get one.",
+      "type": "text/plain"
+    }
+  }
+}

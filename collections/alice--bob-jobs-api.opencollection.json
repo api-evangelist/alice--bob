@@ -1,0 +1,264 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Felis Cloud • API Reference Jobs API",
+    "version": "0.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Jobs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Jobs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/external/v1/jobs/",
+            "headers": [
+              {
+                "name": "authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Return all active and completed jobs associated with the authenticated user."
+        },
+        {
+          "info": {
+            "name": "Create Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/external/v1/jobs/",
+            "headers": [
+              {
+                "name": "authorization",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new job to be run on a specific target. The job's code needs to be uploaded separately using \"Upload Input\" to start running."
+        },
+        {
+          "info": {
+            "name": "Get Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/external/v1/jobs/:job_id",
+            "headers": [
+              {
+                "name": "authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get details on a given job."
+        },
+        {
+          "info": {
+            "name": "Cancel Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "/external/v1/jobs/:job_id",
+            "headers": [
+              {
+                "name": "authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Cancel a given active job."
+        },
+        {
+          "info": {
+            "name": "Download Input",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/external/v1/jobs/:job_id/input",
+            "headers": [
+              {
+                "name": "authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Return the raw input QIR code of a given job as it was submitted to the API."
+        },
+        {
+          "info": {
+            "name": "Upload Input",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "/external/v1/jobs/:job_id/input",
+            "headers": [
+              {
+                "name": "authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "Upload the input code for a job in QIR format to trigger its execution (provided that the target is available)."
+        },
+        {
+          "info": {
+            "name": "Download Transpiled",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/external/v1/jobs/:job_id/transpiled",
+            "headers": [
+              {
+                "name": "authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Return the QIR code of a given job transpiled for the specificities of the target's gate set."
+        },
+        {
+          "info": {
+            "name": "Download Output",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/external/v1/jobs/:job_id/output",
+            "headers": [
+              {
+                "name": "authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Return the results of a given job as a list of measurements with their number of occurrences."
+        },
+        {
+          "info": {
+            "name": "Download Memory",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/external/v1/jobs/:job_id/memory",
+            "headers": [
+              {
+                "name": "authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Return the results of a given job as a list of measurements of each shot"
+        },
+        {
+          "info": {
+            "name": "Get Job Metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/external/v1/jobs/:job_id/metrics",
+            "headers": [
+              {
+                "name": "authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Return recorded metrics about the job:\n> `qpu_duration_ns`: duration recorded executing a circuit on a QPU, in nanoseconds.\n> `simulation_duration_ns`: duration recorded simulating a circuit, in nanoseconds."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

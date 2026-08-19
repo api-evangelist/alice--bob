@@ -1,0 +1,75 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Felis Cloud • API Reference Targets API",
+    "version": "0.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Targets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Targets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/external/v1/targets/"
+          },
+          "docs": "Return the list of all targets to execute the jobs on. These targets can be emulators or real quantum hardware."
+        },
+        {
+          "info": {
+            "name": "Target Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/external/v1/targets/:target/health",
+            "params": [
+              {
+                "name": "target",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Return the current status of a target:\n\"OK\" if the target is enabled and in a working state.\n\"NOK\" if the target is enabled but monitored to be in a bad state.\n\"OFF\" if the target is disabled at this given time."
+        },
+        {
+          "info": {
+            "name": "List Target Availabilities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "/external/v1/targets/:target/availabilities",
+            "params": [
+              {
+                "name": "target",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get the latest entries of a target's planned availabilities."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
