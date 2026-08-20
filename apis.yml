@@ -51,6 +51,8 @@ apis:
   humanURL: https://felis.alice-bob.com/docs/reference/the_api/
   baseURL: https://api-gcp.alice-bob.com/v1
   tags:
+  - Job
+  tags_raw:
   - Jobs
   properties:
   - type: OpenAPI
