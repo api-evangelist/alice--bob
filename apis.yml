@@ -9,6 +9,18 @@ description: 'Alice & Bob is a quantum computing company headquartered in Paris 
   and logical qubit emulators. Felis Cloud is reached through a public REST API (jobs,
   targets, availability and health) that accepts circuits in QIR format, and through
   the open-source qiskit-alice-bob-provider Qiskit provider that wraps it.'
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://avatars.githubusercontent.com/u/72556371?v=4
 url: https://raw.githubusercontent.com/api-evangelist/alice--bob/refs/heads/main/apis.yml
 x-type: company
