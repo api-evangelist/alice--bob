@@ -2,27 +2,7 @@ openapi: 3.2.0
 info:
   title: Felis Cloud • API Reference Targets API
   summary: '**Run quantum circuits on Alice & Bob''s emulators and real quantum hardware.**'
-  description: 'The Felis Cloud API lets you execute quantum circuits on emulators and real quantum hardware made by Alice & Bob.
-
-
-    To run a circuit with the API:
-
-    - Create a job with "Create Job", targeting a specific backend (listed by  "List Targets").
-
-    - Upload the input quantum code of your job in [QIR format](https://github.com/qir-alliance/qir-spec) with "Upload Input".
-
-    - Monitor the job''s status with "Get Job".
-
-    - Read the results with "Download Output".
-
-
-    The execution stack includes a transpilation step to adapt the input code to the target''s gate set. The result of the transpilation can be seen with "Download Transpiled".
-
-
-    This API is used by [Alice & Bob''s Qiskit provider](https://github.com/Alice-Bob-SW/qiskit-alice-bob-provider), which also serves as a reference implementation.
-
-
-    Using this API requires an API key in the authorization header. Please reach out to Alice & Bob athttps://alice-bob.com/products/quantum-cloud-felis to learn how to get one.'
+  description: The Felis Cloud API lets you execute quantum circuits on emulators and real quantum hardware made by Alice & Bob.
   version: 0.1.0
 servers:
 - url: /external
@@ -125,49 +105,6 @@ paths:
       - Targets
 components:
   schemas:
-    TargetStatus:
-      type: string
-      enum:
-      - 'OFF'
-      - OK
-      - NOK
-      title: TargetStatus
-    Instruction:
-      properties:
-        signature:
-          type: string
-          title: Signature
-      additionalProperties: false
-      type: object
-      required:
-      - signature
-      title: Instruction
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    InputParamRangeConstraint:
-      properties:
-        min:
-          anyOf:
-          - type: number
-          - type: integer
-          title: Min
-        max:
-          anyOf:
-          - type: number
-          - type: integer
-          title: Max
-      type: object
-      required:
-      - min
-      - max
-      title: InputParamRangeConstraint
     InputParamConfiguration:
       properties:
         required:
@@ -222,6 +159,70 @@ components:
       - instructions
       - inputParams
       title: TargetConfiguration
+    Instruction:
+      properties:
+        signature:
+          type: string
+          title: Signature
+      additionalProperties: false
+      type: object
+      required:
+      - signature
+      title: Instruction
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    InputParamRangeConstraint:
+      properties:
+        min:
+          anyOf:
+          - type: number
+          - type: integer
+          title: Min
+        max:
+          anyOf:
+          - type: number
+          - type: integer
+          title: Max
+      type: object
+      required:
+      - min
+      - max
+      title: InputParamRangeConstraint
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    TargetStatus:
+      type: string
+      enum:
+      - 'OFF'
+      - OK
+      - NOK
+      title: TargetStatus
     TargetAvailability:
       properties:
         timestamp:
@@ -256,24 +257,3 @@ components:
       - target
       - createdAt
       title: TargetAvailability
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError

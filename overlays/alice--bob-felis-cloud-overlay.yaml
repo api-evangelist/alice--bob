@@ -3,10 +3,10 @@ info:
   title: API Evangelist enhancement overlay for the Alice & Bob Felis Cloud API
   version: 1.0.0
 extends: openapi/alice--bob-felis-cloud-openapi.json
-generated: '2026-08-06'
-method: generated
-source: openapi/alice--bob-felis-cloud-openapi.json
-rationale: >-
+x-generated: '2026-08-06'
+x-method: generated
+x-source: openapi/alice--bob-felis-cloud-openapi.json
+x-rationale: >-
   The captured OpenAPI is FastAPI-generated and carries three gaps that make it hard for a
   machine to consume: (1) components.securitySchemes is absent and the API key is modelled as
   an OPTIONAL `authorization` header parameter on each operation, even though every

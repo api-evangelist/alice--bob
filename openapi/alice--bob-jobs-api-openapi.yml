@@ -2,27 +2,7 @@ openapi: 3.2.0
 info:
   title: Felis Cloud • API Reference Jobs API
   summary: '**Run quantum circuits on Alice & Bob''s emulators and real quantum hardware.**'
-  description: 'The Felis Cloud API lets you execute quantum circuits on emulators and real quantum hardware made by Alice & Bob.
-
-
-    To run a circuit with the API:
-
-    - Create a job with "Create Job", targeting a specific backend (listed by  "List Targets").
-
-    - Upload the input quantum code of your job in [QIR format](https://github.com/qir-alliance/qir-spec) with "Upload Input".
-
-    - Monitor the job''s status with "Get Job".
-
-    - Read the results with "Download Output".
-
-
-    The execution stack includes a transpilation step to adapt the input code to the target''s gate set. The result of the transpilation can be seen with "Download Transpiled".
-
-
-    This API is used by [Alice & Bob''s Qiskit provider](https://github.com/Alice-Bob-SW/qiskit-alice-bob-provider), which also serves as a reference implementation.
-
-
-    Using this API requires an API key in the authorization header. Please reach out to Alice & Bob athttps://alice-bob.com/products/quantum-cloud-felis to learn how to get one.'
+  description: The Felis Cloud API lets you execute quantum circuits on emulators and real quantum hardware made by Alice & Bob.
   version: 0.1.0
 servers:
 - url: /external
@@ -405,19 +385,16 @@ paths:
       - Jobs
 components:
   schemas:
-    JobError:
+    Body_upload_input_v1_jobs__job_id__input_post:
       properties:
-        content:
-          type: object
-          title: Content
-      additionalProperties: false
+        input:
+          type: string
+          format: binary
+          title: Input
       type: object
       required:
-      - content
-      title: JobError
-    InputDataFormat:
-      const: HUMAN_QIR
-      title: InputDataFormat
+      - input
+      title: Body_upload_input_v1_jobs__job_id__input_post
     EventType:
       type: string
       enum:
@@ -436,15 +413,73 @@ components:
       - CANCELLED
       - TIMED_OUT
       title: EventType
-    HTTPValidationError:
+    InputDataFormat:
+      const: HUMAN_QIR
+      title: InputDataFormat
+    JobError:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        content:
+          type: object
+          title: Content
+      additionalProperties: false
       type: object
-      title: HTTPValidationError
+      required:
+      - content
+      title: JobError
+    ExternalJobMetrics:
+      properties:
+        qpu_duration_ns:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Qpu Duration Ns
+        simulation_duration_ns:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Simulation Duration Ns
+      type: object
+      title: ExternalJobMetrics
+      description: 'Job metrics we wish to expose to external users.
+
+        We define aliases to match the external metric names to the internal ones,
+
+        that correspond more closely to what we record.'
+    JobEvent:
+      properties:
+        type:
+          $ref: '#/components/schemas/EventType'
+        createdAt:
+          type: string
+          format: date-time
+          title: Createdat
+      additionalProperties: false
+      type: object
+      required:
+      - type
+      - createdAt
+      title: JobEvent
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     ExternalJob:
       properties:
         inputDataFormat:
@@ -492,39 +527,6 @@ components:
       - events
       - errors
       title: ExternalJob
-    JobEvent:
-      properties:
-        type:
-          $ref: '#/components/schemas/EventType'
-        createdAt:
-          type: string
-          format: date-time
-          title: Createdat
-      additionalProperties: false
-      type: object
-      required:
-      - type
-      - createdAt
-      title: JobEvent
-    ExternalJobMetrics:
-      properties:
-        qpu_duration_ns:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Qpu Duration Ns
-        simulation_duration_ns:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Simulation Duration Ns
-      type: object
-      title: ExternalJobMetrics
-      description: 'Job metrics we wish to expose to external users.
-
-        We define aliases to match the external metric names to the internal ones,
-
-        that correspond more closely to what we record.'
     CreateExternalJob:
       properties:
         inputDataFormat:
@@ -545,37 +547,15 @@ components:
       - target
       - inputParams
       title: CreateExternalJob
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     OutpuDataFormat:
       const: HISTOGRAM
       title: OutpuDataFormat
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    Body_upload_input_v1_jobs__job_id__input_post:
-      properties:
-        input:
-          type: string
-          format: binary
-          title: Input
-      type: object
-      required:
-      - input
-      title: Body_upload_input_v1_jobs__job_id__input_post

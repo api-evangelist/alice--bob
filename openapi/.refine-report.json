@@ -1,9 +1,7 @@
 {
   "provider": "alice--bob",
   "sources": [
-    "alice--bob-health-api-openapi.yml",
-    "alice--bob-jobs-api-openapi.yml",
-    "alice--bob-targets-api-openapi.yml"
+    "_original/alice--bob-felis-cloud-openapi.json"
   ],
   "outputs": [
     "alice--bob-health-api-openapi.yml",
@@ -14,10 +12,30 @@
   "errors": [],
   "warnings": [],
   "notes": [
-    "alice--bob-health-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "alice--bob-jobs-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "alice--bob-targets-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "alice--bob-felis-cloud-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "alice--bob-felis-cloud-openapi.json: tagged paths GET /v1/jobs/ -> Jobs",
+    "alice--bob-felis-cloud-openapi.json: tagged paths POST /v1/jobs/ -> Jobs",
+    "alice--bob-felis-cloud-openapi.json: tagged paths GET /v1/jobs/{job_id} -> Jobs",
+    "alice--bob-felis-cloud-openapi.json: tagged paths DELETE /v1/jobs/{job_id} -> Jobs",
+    "alice--bob-felis-cloud-openapi.json: tagged paths POST /v1/jobs/{job_id}/input -> Jobs",
+    "alice--bob-felis-cloud-openapi.json: tagged paths GET /v1/jobs/{job_id}/input -> Jobs",
+    "alice--bob-felis-cloud-openapi.json: tagged paths GET /v1/jobs/{job_id}/transpiled -> Jobs",
+    "alice--bob-felis-cloud-openapi.json: tagged paths GET /v1/jobs/{job_id}/output -> Jobs",
+    "alice--bob-felis-cloud-openapi.json: tagged paths GET /v1/jobs/{job_id}/memory -> Jobs",
+    "alice--bob-felis-cloud-openapi.json: tagged paths GET /v1/jobs/{job_id}/metrics -> Jobs",
+    "alice--bob-felis-cloud-openapi.json: tagged paths GET /v1/targets/ -> Targets",
+    "alice--bob-felis-cloud-openapi.json: tagged paths GET /v1/targets/{target}/health -> Targets",
+    "alice--bob-felis-cloud-openapi.json: tagged paths GET /v1/targets/{target}/availabilities -> Targets",
+    "alice--bob-felis-cloud-openapi.json: tagged paths GET /v1/health/ -> Health",
+    "alice--bob-felis-cloud-openapi.json: declared missing tag: Health",
+    "alice--bob-felis-cloud-openapi.json: declared missing tag: Jobs",
+    "alice--bob-felis-cloud-openapi.json: declared missing tag: Targets",
     "apis.yml register: already-registered"
   ],
-  "skipped": []
+  "skipped": [
+    "alice--bob-health-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "alice--bob-jobs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "alice--bob-targets-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
