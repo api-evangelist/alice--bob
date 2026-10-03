@@ -105,25 +105,60 @@ paths:
       - Targets
 components:
   schemas:
-    Instruction:
+    InputParamConfiguration:
       properties:
-        signature:
+        required:
+          type: boolean
+          title: Required
+        type:
           type: string
-          title: Signature
-      additionalProperties: false
+          enum:
+          - float
+          - int
+          - bool
+          title: Type
+        default:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Default
+        constraints:
+          items:
+            $ref: '#/components/schemas/InputParamRangeConstraint'
+          type: array
+          title: Constraints
       type: object
       required:
-      - signature
-      title: Instruction
-    HTTPValidationError:
+      - required
+      - type
+      - default
+      - constraints
+      title: InputParamConfiguration
+    TargetConfiguration:
       properties:
-        detail:
+        name:
+          type: string
+          title: Name
+        numQubits:
+          type: integer
+          title: Numqubits
+        instructions:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            $ref: '#/components/schemas/Instruction'
           type: array
-          title: Detail
+          title: Instructions
+        inputParams:
+          additionalProperties:
+            $ref: '#/components/schemas/InputParamConfiguration'
+          type: object
+          title: Inputparams
       type: object
-      title: HTTPValidationError
+      required:
+      - name
+      - numQubits
+      - instructions
+      - inputParams
+      title: TargetConfiguration
     TargetAvailability:
       properties:
         timestamp:
@@ -175,35 +210,6 @@ components:
       - min
       - max
       title: InputParamRangeConstraint
-    InputParamConfiguration:
-      properties:
-        required:
-          type: boolean
-          title: Required
-        type:
-          type: string
-          enum:
-          - float
-          - int
-          - bool
-          title: Type
-        default:
-          anyOf:
-          - {}
-          - type: 'null'
-          title: Default
-        constraints:
-          items:
-            $ref: '#/components/schemas/InputParamRangeConstraint'
-          type: array
-          title: Constraints
-      type: object
-      required:
-      - required
-      - type
-      - default
-      - constraints
-      title: InputParamConfiguration
     TargetStatus:
       type: string
       enum:
@@ -211,31 +217,16 @@ components:
       - OK
       - NOK
       title: TargetStatus
-    TargetConfiguration:
+    Instruction:
       properties:
-        name:
+        signature:
           type: string
-          title: Name
-        numQubits:
-          type: integer
-          title: Numqubits
-        instructions:
-          items:
-            $ref: '#/components/schemas/Instruction'
-          type: array
-          title: Instructions
-        inputParams:
-          additionalProperties:
-            $ref: '#/components/schemas/InputParamConfiguration'
-          type: object
-          title: Inputparams
+          title: Signature
+      additionalProperties: false
       type: object
       required:
-      - name
-      - numQubits
-      - instructions
-      - inputParams
-      title: TargetConfiguration
+      - signature
+      title: Instruction
     ValidationError:
       properties:
         loc:
@@ -257,3 +248,12 @@ components:
       - msg
       - type
       title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError

@@ -385,6 +385,24 @@ paths:
       - Jobs
 components:
   schemas:
+    EventType:
+      type: string
+      enum:
+      - CREATED
+      - FETCHING_INPUT
+      - INPUT_READY
+      - COMPILING
+      - COMPILED
+      - COMPILATION_FAILED
+      - TRANSPILING
+      - TRANSPILED
+      - TRANSPILATION_FAILED
+      - EXECUTING
+      - SUCCEEDED
+      - EXECUTION_FAILED
+      - CANCELLED
+      - TIMED_OUT
+      title: EventType
     ExternalJobMetrics:
       properties:
         qpu_duration_ns:
@@ -404,28 +422,6 @@ components:
         We define aliases to match the external metric names to the internal ones,
 
         that correspond more closely to what we record.'
-    JobError:
-      properties:
-        content:
-          type: object
-          title: Content
-      additionalProperties: false
-      type: object
-      required:
-      - content
-      title: JobError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    InputDataFormat:
-      const: HUMAN_QIR
-      title: InputDataFormat
     Body_upload_input_v1_jobs__job_id__input_post:
       properties:
         input:
@@ -456,6 +452,16 @@ components:
       - target
       - inputParams
       title: CreateExternalJob
+    JobError:
+      properties:
+        content:
+          type: object
+          title: Content
+      additionalProperties: false
+      type: object
+      required:
+      - content
+      title: JobError
     JobEvent:
       properties:
         type:
@@ -470,24 +476,6 @@ components:
       - type
       - createdAt
       title: JobEvent
-    EventType:
-      type: string
-      enum:
-      - CREATED
-      - FETCHING_INPUT
-      - INPUT_READY
-      - COMPILING
-      - COMPILED
-      - COMPILATION_FAILED
-      - TRANSPILING
-      - TRANSPILED
-      - TRANSPILATION_FAILED
-      - EXECUTING
-      - SUCCEEDED
-      - EXECUTION_FAILED
-      - CANCELLED
-      - TIMED_OUT
-      title: EventType
     ExternalJob:
       properties:
         inputDataFormat:
@@ -535,9 +523,6 @@ components:
       - events
       - errors
       title: ExternalJob
-    OutpuDataFormat:
-      const: HISTOGRAM
-      title: OutpuDataFormat
     ValidationError:
       properties:
         loc:
@@ -559,3 +544,18 @@ components:
       - msg
       - type
       title: ValidationError
+    OutpuDataFormat:
+      const: HISTOGRAM
+      title: OutpuDataFormat
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    InputDataFormat:
+      const: HUMAN_QIR
+      title: InputDataFormat
