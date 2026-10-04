@@ -105,6 +105,52 @@ paths:
       - Targets
 components:
   schemas:
+    TargetConfiguration:
+      properties:
+        name:
+          type: string
+          title: Name
+        numQubits:
+          type: integer
+          title: Numqubits
+        instructions:
+          items:
+            $ref: '#/components/schemas/Instruction'
+          type: array
+          title: Instructions
+        inputParams:
+          additionalProperties:
+            $ref: '#/components/schemas/InputParamConfiguration'
+          type: object
+          title: Inputparams
+      type: object
+      required:
+      - name
+      - numQubits
+      - instructions
+      - inputParams
+      title: TargetConfiguration
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     InputParamConfiguration:
       properties:
         required:
@@ -134,31 +180,39 @@ components:
       - default
       - constraints
       title: InputParamConfiguration
-    TargetConfiguration:
+    HTTPValidationError:
       properties:
-        name:
-          type: string
-          title: Name
-        numQubits:
-          type: integer
-          title: Numqubits
-        instructions:
+        detail:
           items:
-            $ref: '#/components/schemas/Instruction'
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Instructions
-        inputParams:
-          additionalProperties:
-            $ref: '#/components/schemas/InputParamConfiguration'
-          type: object
-          title: Inputparams
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    TargetStatus:
+      type: string
+      enum:
+      - 'OFF'
+      - OK
+      - NOK
+      title: TargetStatus
+    InputParamRangeConstraint:
+      properties:
+        min:
+          anyOf:
+          - type: number
+          - type: integer
+          title: Min
+        max:
+          anyOf:
+          - type: number
+          - type: integer
+          title: Max
       type: object
       required:
-      - name
-      - numQubits
-      - instructions
-      - inputParams
-      title: TargetConfiguration
+      - min
+      - max
+      title: InputParamRangeConstraint
     TargetAvailability:
       properties:
         timestamp:
@@ -193,30 +247,6 @@ components:
       - target
       - createdAt
       title: TargetAvailability
-    InputParamRangeConstraint:
-      properties:
-        min:
-          anyOf:
-          - type: number
-          - type: integer
-          title: Min
-        max:
-          anyOf:
-          - type: number
-          - type: integer
-          title: Max
-      type: object
-      required:
-      - min
-      - max
-      title: InputParamRangeConstraint
-    TargetStatus:
-      type: string
-      enum:
-      - 'OFF'
-      - OK
-      - NOK
-      title: TargetStatus
     Instruction:
       properties:
         signature:
@@ -227,33 +257,3 @@ components:
       required:
       - signature
       title: Instruction
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
