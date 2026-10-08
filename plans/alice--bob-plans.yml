@@ -82,3 +82,36 @@ free_of_charge:
     note: >-
       The AliceBobLocalProvider emulators in qiskit-alice-bob-provider run on the developer's
       own machine and are free and unmetered — no subscription or API key required.
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - metered
+  - negotiated
+  units:
+  - compute
+  plans:
+  - name: Felis Cloud — Boson 4 QPU
+    access: other
+    model: metered
+    model_how: stated
+    units:
+    - compute
+    periods:
+    - month
+    - per-use
+  - name: Felis Cloud — Emulators
+    access: other
+    model: metered
+    model_how: stated
+    units:
+    - compute
+    periods:
+    - month
+    - per-use
+  - name: Felis Cloud — Custom
+    access: negotiated
+    model: negotiated
+    model_how: stated
+    units: []
+    periods: []
