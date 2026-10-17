@@ -105,6 +105,61 @@ paths:
       - Targets
 components:
   schemas:
+    InputParamConfiguration:
+      properties:
+        required:
+          type: boolean
+          title: Required
+        type:
+          type: string
+          enum:
+          - float
+          - int
+          - bool
+          title: Type
+        default:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Default
+        constraints:
+          items:
+            $ref: '#/components/schemas/InputParamRangeConstraint'
+          type: array
+          title: Constraints
+      type: object
+      required:
+      - required
+      - type
+      - default
+      - constraints
+      title: InputParamConfiguration
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    InputParamRangeConstraint:
+      properties:
+        min:
+          anyOf:
+          - type: number
+          - type: integer
+          title: Min
+        max:
+          anyOf:
+          - type: number
+          - type: integer
+          title: Max
+      type: object
+      required:
+      - min
+      - max
+      title: InputParamRangeConstraint
     TargetConfiguration:
       properties:
         name:
@@ -151,68 +206,16 @@ components:
       - msg
       - type
       title: ValidationError
-    InputParamConfiguration:
+    Instruction:
       properties:
-        required:
-          type: boolean
-          title: Required
-        type:
+        signature:
           type: string
-          enum:
-          - float
-          - int
-          - bool
-          title: Type
-        default:
-          anyOf:
-          - {}
-          - type: 'null'
-          title: Default
-        constraints:
-          items:
-            $ref: '#/components/schemas/InputParamRangeConstraint'
-          type: array
-          title: Constraints
+          title: Signature
+      additionalProperties: false
       type: object
       required:
-      - required
-      - type
-      - default
-      - constraints
-      title: InputParamConfiguration
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    TargetStatus:
-      type: string
-      enum:
-      - 'OFF'
-      - OK
-      - NOK
-      title: TargetStatus
-    InputParamRangeConstraint:
-      properties:
-        min:
-          anyOf:
-          - type: number
-          - type: integer
-          title: Min
-        max:
-          anyOf:
-          - type: number
-          - type: integer
-          title: Max
-      type: object
-      required:
-      - min
-      - max
-      title: InputParamRangeConstraint
+      - signature
+      title: Instruction
     TargetAvailability:
       properties:
         timestamp:
@@ -247,13 +250,10 @@ components:
       - target
       - createdAt
       title: TargetAvailability
-    Instruction:
-      properties:
-        signature:
-          type: string
-          title: Signature
-      additionalProperties: false
-      type: object
-      required:
-      - signature
-      title: Instruction
+    TargetStatus:
+      type: string
+      enum:
+      - 'OFF'
+      - OK
+      - NOK
+      title: TargetStatus
